@@ -1,0 +1,72 @@
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+    color: #7b8288;
+    font-family: "Lato", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado */
+header { 
+    background-color: #0061ae;
+}
+
+.titulo {
+    color: #fff;
+    text-align: center;
+}
+
+/* Pie de página */
+
+footer {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: right;
+    color: #c8c8c8;
+    padding-right: 1%;
+    background-color: #333c4e;
+}
+
+.conexion{
+    text-align: center;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.estructura {
+    display: flex;
+    margin: 1%;
+}
+
+.camara {
+    flex: 70%;
+    text-align: center;
+}
+
+.controles {
+    flex: 30%;
+    text-align: center;
+}
+
+.control {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin: 0 5%; 
+}
+
+.parametros {
+    margin: 0 5%;
+    text-align: left;
+}
+
+.captura {
+    text-align: center;
+    margin: 0 0 20px 0;
+}

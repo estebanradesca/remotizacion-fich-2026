@@ -3,7 +3,68 @@
     <head>
         <meta charset="UTF-8">
         <title>Remotización</title>
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/estilos.css"/>
+        <!-- Fuente Lato-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
     </head>
     <body>
+        <!-- Encabezado -->
+        <header>
+            <h1 class="titulo">Experimento de Reynolds</h1>
+        </header>
+
+        <main>
+            <div class="conexion">
+                <p>Estado: <span id="estado">DESCONECTADO</span> </p>
+                <button id="switch">Conectar</button>
+            </div>
+
+
+            <div class="estructura">
+                <div class="camara">
+                    <h3>Cámara 1</h3>
+                    <img src="img/reynolds.png" alt="Equipo de Reynolds"/>
+                </div>
+
+                <div class="controles">
+                    <h3>Datos</h3>
+                    <div class="control">
+                        <p>Caudal</p>
+                        <input type="range" id="caudal" min="0" max="100" value="50">
+                        <p>##Valor##</p>
+                    </div>
+
+                    <div class="control">
+                        <p>Líquido</p>
+                        <input type="range" id="liquido" min="0" max="100" value="50">
+                        <p>##Valor##</p>
+                    </div>
+
+                    <div class="parametros">
+                        <p>Densidad del líquido</p>
+                        <p>Diámetro</p>
+                        <p>Temperatura</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="captura">
+                <button>Guardar</button>
+            </div>
+                    
+        </main>
+        
+        <!-- Pie de página -->
+        <footer>
+            <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
+        </footer>
+
+        <!-- JS -->
+        <script src="js/app.js" defer></script>
     </body>
 </html>
