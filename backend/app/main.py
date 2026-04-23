@@ -1,0 +1,8 @@
+from fastapi import FastAPI, Websocket                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+from app.api.routers import caudal
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"mensaje": "Hola"}
