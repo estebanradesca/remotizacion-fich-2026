@@ -45,24 +45,24 @@ img {
 }
 
 .camara {
-    flex: 70%;
+    flex: 75%;
     text-align: center;
 }
 
 .controles {
-    flex: 30%;
+    flex: 25%;
     text-align: center;
 }
 
 .control {
     display: flex;
     flex-direction: row;
-    gap: 2px;
-    margin: 0 5%; 
+    gap: 5px;
+    margin: 0 10%; 
 }
 
 .parametros {
-    margin: 0 5%;
+    margin: 0 10%;
     text-align: left;
 }
 
