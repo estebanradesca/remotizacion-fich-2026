@@ -1,36 +1,37 @@
 from fastapi import WebSocket
+import asyncio
 
 class ControlConexion:
     def __init__(self):
-        self.websocket: WebSocket | None = None
+        self.websocket_clientes: list[WebSocket] = [] # Es una lista ya que pueden ser varios clientes
     
+    # Conecta el cliente 
     async def conectar(self, websocket: WebSocket):
         await websocket.accept()
-        self.websocket = websocket
+        print(websocket)
+        self.websocket_clientes.append(websocket)
+        print(f"Cliente conectado. Total: {len(self.websocket_clientes)}")
     
-    def desconectar(self):
-        self.websocket = None
+    # Desconecta al cliente
+    def desconectar(self, websocket: WebSocket):
+        if websocket in self.websocket_clientes:
+            self.websocket_clientes.remove(websocket)
+            print(f"Cliente eliminado de la lista de clientes. Total: {len(self.websocket_clientes)}")
     
-    # Envío los datos desde el servidor al cliente
-    async def enviar(self, msg: "str"):
-        if self.websocket:
-            await self.websocket.send_text(msg)
+    # Envío los datos desde el servidor a los clientes
+    async def difundir(self, mensaje: str):
+        for cliente in self.websocket_clientes:
+            try:
+                await cliente.send_text(mensaje)
+            except:
+                print(f"No se puedo enviar el mensaje al cliente {cliente}")
 
-# Callback para enviar mensaje desde el servidor al cliente web
-# que llega desde el arduino 
-import asyncio
-
-async def recibo_mensaje(msg: str):
-    # Esto envía el mensaje a través del WebSocket
-    print(f"DEBUG: Intentando enviar al WS: {msg}")
-    await controlador_ws.enviar(msg)
-
-# Si tu SocketArduino llama al callback desde un hilo distinto,
-# necesitas una versión que pueda ser llamada de forma segura:
-def callback_desde_socket(msg: str):
-    # Obtenemos el loop de la app y le pedimos que ejecute la corrutina
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        loop.create_task(recibo_mensaje(msg))
-
+# Instancia global del controlador del websocket 
 controlador_ws = ControlConexion()    
+
+# Callback para enviar mensaje a los clientes web que llega al servidor desde el Arduino  
+async def recibo_mensaje_de_arduino(datos: bytes):
+
+    mensaje = datos.decode("utf-8")
+
+    await controlador_ws.difundir(mensaje)

@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field
+from typing import Annotated
 from enum import Enum
 
 class Estado(str, Enum):
     APAGADO = "apagado"
-    LISTO = "listo"
     FUNCIONANDO = "funcionando"
     ERROR = "error"
 
@@ -11,11 +11,16 @@ class TipoComando(str, Enum):
     TINTA = "tinta"
     CAUDAL = "caudal"
 
-
 # Se envían desde la web
 
+class ModificarPasosAgua(BaseModel):
+    pasos: Annotated[int, Field(ge=0, le=600)]
+
+class ModificarPasosTinta(BaseModel):
+    pasos: Annotated[int, Field(ge=0, le=50)]
+
+
 class CambiarEstado(BaseModel):
-    id_equipo: int = Field(ge=1, le=5)
     estado: Estado 
 
 class ComandoControl(BaseModel):
@@ -29,6 +34,7 @@ class EstadoEquipo(BaseModel):
     estado: Estado 
 
 class LecturaSensores(BaseModel):
+    id_equipo: int = Field(ge=0, le=5)
     temperatura: float 
     vel_caudal: float 
 

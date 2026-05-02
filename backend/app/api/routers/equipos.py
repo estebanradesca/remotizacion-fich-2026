@@ -1,17 +1,20 @@
 from fastapi import APIRouter, Depends
-
-
-from app.api.dependencies import obtener_arduino
+from typing import Annotated
+from app.api.dependencies import obtener_socket
 from app.infra.tcp_arduino import SocketArduino
-from app.api.schemas.equipos_schema import CambiarEstado, ComandoControl
-from app.services.equipos_servicio import enviar_mensaje
+from app.api.schemas.equipos import CambiarEstado, ComandoControl
+from app.services.equipos import enviar_mensaje
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/equipos"
+    tags="equipos"
+)
 
-@router.post("/equipo/estado")
+SocketArduinoDep = Annotated[SocketArduino, Depends(obtener_socket)]
+@router.post("/estado")
 async def cambiar_estado(
     cmd: CambiarEstado, 
-    arduino: SocketArduino = Depends(obtener_arduino)
+    socket_arduino: SocketArduinoDep,
     ):
 
     mensaje = await enviar_mensaje(cmd, arduino)
@@ -22,7 +25,7 @@ async def cambiar_estado(
 @router.post("/equipo/comando")
 async def enviar_comando(
     cmd: ComandoControl, 
-    arduino: SocketArduino = Depends(obtener_arduino)
+    arduino: SocketArduino = Depends(obtener_socket)
     ):
     
     mensaje = await enviar_mensaje(arduino, cmd)

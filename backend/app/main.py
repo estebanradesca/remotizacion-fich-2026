@@ -1,36 +1,57 @@
 from fastapi import FastAPI, WebSocket  
 from fastapi.middleware.cors import CORSMiddleware 
-import asyncio
 from contextlib import asynccontextmanager
+import asyncio
 
-from app.api.ws.ws_control import recibo_mensaje
-from app.api.routers import equipos, websocket
 from app.infra.tcp_arduino import SocketArduino
+from app.api.ws.ws_control import recibo_mensaje_de_arduino, controlador_ws
+from app.api.routers import equipos, websocket
 
-# Este código se ejecuta antes de iniciar la app
-# Inicio el socket TCP con el módulo NT1-B del Arduino
-# y también la conexión con la base de datos
 
-### Falta la conexión a la base de datos
+# Inicializo recursos que voy a necesitar durante todo el tiempo
+# que dure el servidor. Cuando el servidor finaliza se cierran
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Se ejecuta antes de iniciar la app
-    app.state.arduino_socket = SocketArduino()
+    # Este código se ejecuta antes de iniciar el servidor
 
+    # Inicio la conexión con el módulo NT1-B del Arduino    
+    app.state.arduino_socket = SocketArduino()
     await asyncio.to_thread(app.state.arduino_socket.conectar)
 
-    app.state.arduino_socket.funcion_callback(recibo_mensaje)
+    # Inicio la conexión a la base de datos
+    ### Falta la conexión a la base de datos.
 
-    app.state.arduino_task = asyncio.create_task(
-        app.state.arduino_socket.escuchar()
-    )
+    # Controlador del websocket para usarlo como dependencia
+    app.state.controlador = controlador_ws
+
+
+    # Le paso a mi socket la función que utilizo para reenviar el mensaje
+    # que me llega desde el Arduino al websocket.
+    app.state.arduino_socket.funcion_callback(recibo_mensaje_de_arduino)
+    
+    # El socket se queda escuchando en segundo plano sin interrumpir
+    escucha_task = asyncio.create_task(app.state.arduino_socket.recibir())
+    
     yield
-    # Se ejecuta antes de cerrar la app
-    app.state.arduino_task.cancel()
+    # Esta parte del código se ejecuta justo antes de cerrar el servidor
+
+    escucha_task.cancel()
+
+    # Cierro la conexión con el módulo NT1-B del Arduino 
     await asyncio.to_thread(app.state.arduino_socket.cerrar)
+    
 
 
 app = FastAPI(lifespan = lifespan)
+
+### Cambiar después para solo permitir acceso seguro
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(equipos.router)
 app.include_router(websocket.router)
