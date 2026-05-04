@@ -2,11 +2,11 @@ from fastapi import APIRouter, WebSocket, Depends
 from app.api.dependencies import obtener_socket, obtener_controlador
 from app.infra.tcp_arduino import SocketArduino
 from app.api.ws.ws_control import ControlConexion
-from app.services.equipos import enviar_mensaje_ws
+from app.services.equipos import enviar_comando_arduino
 
 router = APIRouter(
     prefix="/ws",
-    tags="websocket"
+    tags=["websocket"]
 )
 
 @router.websocket("/")
@@ -21,8 +21,8 @@ async def websocket_equipo(
     # Recibo un comando desde el cliente y lo envío al arduino
     try: 
         while True:
-            mensaje = await websocket.receive_text()
-            await enviar_mensaje_ws(mensaje, socket_arduino)
+            comando = await websocket.receive_text()
+            await enviar_comando_arduino(comando, socket_arduino)
     # Si algo falla desconecto al cliente
     except: 
         controlador.desconectar(websocket)

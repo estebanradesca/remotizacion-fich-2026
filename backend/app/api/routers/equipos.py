@@ -1,35 +1,55 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
+
 from app.api.dependencies import obtener_socket
 from app.infra.tcp_arduino import SocketArduino
-from app.api.schemas.equipos import CambiarEstado, ComandoControl
-from app.services.equipos import enviar_mensaje
+
+from app.api.schemas.equipos import CambiarEstado
+from app.services.equipos import cambiar_estado_servicio
 
 router = APIRouter(
-    prefix="/equipos"
-    tags="equipos"
+    prefix="/equipos",
+    tags=["equipos"]
 )
 
 SocketArduinoDep = Annotated[SocketArduino, Depends(obtener_socket)]
+
 @router.post("/estado")
 async def cambiar_estado(
-    cmd: CambiarEstado, 
-    socket_arduino: SocketArduinoDep,
+    comando: CambiarEstado,
+    socket_arduino: SocketArduinoDep
     ):
+    respuesta = await cambiar_estado_servicio(comando.id_equipo, comando.estado, socket_arduino)
 
-    mensaje = await enviar_mensaje(cmd, arduino)
-
-    return {"mensaje": mensaje}
+    return {"Respuesta": respuesta}
 
 """
-@router.post("/equipo/comando")
-async def enviar_comando(
-    cmd: ComandoControl, 
-    arduino: SocketArduino = Depends(obtener_socket)
+@router.post("/pasos_agua")
+async def modificar_pasos_agua(
+    comando: ModificarPasosAgua,
+    socket_arduino: SocketArduinoDep
     ):
-    
-    mensaje = await enviar_mensaje(arduino, cmd)
-    
-    return {"mensaje": mensaje}
+
+    respuesta = await modificar_pasos_servicio(
+        comando.id_equipo, 
+        comando.pasos, 
+        tipo = "agua", 
+        socket_arduino = socket_arduino)
+
+    return {"Respuesta": respuesta}
+
+@router.post("/pasos_tinta")
+async def modificar_pasos_tinta(
+    comando: ModificarPasosTinta,
+    socket_arduino: SocketArduinoDep
+    ):
+
+    respuesta = await modificar_pasos_servicio(
+        comando.id_equipo, 
+        comando.pasos, 
+        tipo = "tinta", 
+        socket_arduino = socket_arduino)
+
+    return {"Respuesta": respuesta}
 """
 

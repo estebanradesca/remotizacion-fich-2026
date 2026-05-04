@@ -1,5 +1,6 @@
 from fastapi import WebSocket
 import asyncio
+from app.services.equipos import procesar_lectura_arduino
 
 class ControlConexion:
     def __init__(self):
@@ -20,11 +21,13 @@ class ControlConexion:
     
     # Envío los datos desde el servidor a los clientes
     async def difundir(self, mensaje: str):
+        mensaje_procesado = procesar_lectura_arduino(mensaje)       
         for cliente in self.websocket_clientes:
             try:
-                await cliente.send_text(mensaje)
+                await cliente.send_json(mensaje_procesado)
             except:
-                print(f"No se puedo enviar el mensaje al cliente {cliente}")
+                print(f"No se puedo enviar el mensaje al cliente {cliente}, eliminando...")
+                self.desconectar(cliente)
 
 # Instancia global del controlador del websocket 
 controlador_ws = ControlConexion()    

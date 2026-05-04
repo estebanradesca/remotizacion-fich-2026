@@ -1,56 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
     <head>
-        <meta charset="UTF-8">
-        <title>Remotización</title>
-        
+        <meta charset="UTF-8" />
+        <!-- 
+        Agregar favicon después
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Experimento de Reynolds</title>
+
         <!-- CSS -->
-        <link rel="stylesheet" href="css/estilos.css"/>
+        <!--No es necesario vite lo importa directamente
+
+        <link rel="stylesheet" href="src/style.css"/> 
+        
+        -->
         <!-- Fuente Lato-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-
+        
     </head>
     <body>
-        <!-- Encabezado -->
+    <!-- Encabezado -->
         <header>
             <h1 class="titulo">Experimento de Reynolds</h1>
         </header>
 
-        <main> 
-            
-            <div class="conexion">
-                <p>Estado: <span id="estado">DESCONECTADO</span> </p>
-                <button id="conectar">Conectar</button>
-                <button id="apagar">Apagar</button>
-            </div>
-            
+        <main>             
 
             <div class="estructura">
                 <div class="camara">
                     <h3>Cámara 1</h3>
-                    <img src="img/reynolds.png" alt="Equipo de Reynolds"/>
+                    <img src="/reynolds.png" alt="Equipo de Reynolds"/>
                 </div>
 
                 <div class="controles">
                     <h3>Datos</h3>
+                    <button id="conectar">Restablecer</button>
+
+                    <p id="estado"></p>
                     <div class="control">
                         <p>Agua</p>
-                        <input type="range" id="caudal" min="0" max="100" value="0">
+                        <input type="range" id="pasos_agua" min="0" max="500" step="1" value="0">
                     </div>
 
                     <div class="control">
                         <p>Tinta</p>
-                        <input type="range" id="liquido" min="0" max="100" value="0">
+                        <input type="range" id="pasos_tinta" min="0" max="50" step="1" value="0">
                     </div>
 
                     <div class="parametros">
-                        <p id="contenedor-estado"></p>
-                        <p>Caudal</p>
-                        <p>Temperatura</p>
-                        <p>Activación de Relé (Luz)</p>
+                        <p id="contenedor_ado"></p>
+                        <p>Caudal: <span id="caudal_valor"></span></p>
+                        <p>Temperatura: <span id="temp_valor"> </span></p>
+                        <p>Relé: <span id="rele_estado"></span></p>
                         <p>Mensajes:</p>
+                        <p id="mensajes">
+                        </p>
+                        <p></p>
                     </div>
                 </div>
             </div>
@@ -67,6 +75,6 @@
         </footer>
 
         <!-- JS -->
-        <script src="js/app.js" defer></script>
+        <script type="module" src="src/main.js" defer></script>
     </body>
 </html>
