@@ -45,12 +45,12 @@ img {
 }
 
 .camara {
-    flex: 75%;
+    flex: 70%;
     text-align: center;
 }
 
 .controles {
-    flex: 25%;
+    flex: 30%;
     text-align: center;
 }
 

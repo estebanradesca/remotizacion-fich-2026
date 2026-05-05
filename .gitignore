@@ -12,3 +12,7 @@ __pycache__/
 img/
 
 node_modules/
+
+mediamtx/mediamtx
+
+*ejecutar_mediamtx.sh
