@@ -19,4 +19,4 @@ Estructura del proyecto:
     
 - frontend: Página web 
 
-- config: Configuración
+- mediamtx: Servidor para la conversión del video de cámaras IP
