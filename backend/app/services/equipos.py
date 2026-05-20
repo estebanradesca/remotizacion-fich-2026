@@ -1,56 +1,89 @@
 import socket
+import json
 
 async def cambiar_estado_servicio(id_equipo, estado, socket_arduino):
-    mensaje = f"ID:{id_equipo}|E:{estado.value}|PA:0|PT:0\n"
+    mensaje = "{" + f"\"id_equipo\":{id_equipo}, \"pasos_agua\":0, \"pasos_tinta\":0" + "}\n"
     
     await socket_arduino.enviar(mensaje.encode("utf-8"))
     return "Comando exitoso"
 
 
-async def enviar_comando_arduino(comando: dict, socket_arduino):
-    mensaje = comando
-    await socket_arduino.enviar(mensaje.encode("utf-8"))
-    ### Falta procesarlo
+async def enviar_comando_al_arduino(comando: str, socket_arduino):
+    comando_dict = json.loads(comando)
+    if comando_dict.get("pasos_agua") is not None:
+        pasos = comando_dict["pasos_agua"]
+        mensaje = f"$M2,POS,{pasos}"
+        checksum = calcular_checksum(mensaje[1:])
+        mensaje_procesado = mensaje + "*" + checksum + "\n"
+        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+    if comando_dict.get("pasos_tinta") is not None:
+        pasos = comando_dict["pasos_tinta"]
+        mensaje = f"$M1,POS,{pasos}"
+        checksum = calcular_checksum(mensaje[1:])
+        mensaje_procesado = mensaje + "*" + checksum + "\n"
+        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+    if comando_dict.get("rele") is not None:
+
+        estado = comando_dict["rele"]
+
+        if estado == 0:
+            mensaje = "$RELE,OFF"
+            print("llegue hasta aca")
+        else:
+            mensaje = "$RELE,ON"
+        checksum = calcular_checksum(mensaje[1:])
+        mensaje_procesado = mensaje + "*" + checksum + "\n"
+        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
 
 
-def procesar_lectura_arduino(mensaje: str) -> dict:
+
+def procesar_mensaje_de_arduino(mensaje: str) -> dict:
     mensaje_procesado = {}
-    partes = mensaje.strip().split('|')
+    
+
+    oracion, checksum = mensaje.split("*", 1)
+
     
     
-    for parte in partes:
-        clave, valor = parte.split(':')
-        mensaje_procesado[clave] = valor
 
-    
-    return mensaje_procesado
+    checksum_calculado = calcular_checksum(oracion[1:])
 
 
+    if checksum != checksum_calculado:
+        mensaje_procesado["mensaje"] = "El mensaje no se envió correctamente desde el Arduino, error de checksum" 
+        return mensaje_procesado
 
-"""
-async def modificar_pasos_servicio(id_equipo, pasos, tipo, socket_arduino):
-    if tipo == "agua":
-        mensaje = f"ID: {id_equipo}|E: {estado}|PA: {pasos}|PT: 0\n"
-    elif tipo == "tinta":
-        mensaje = f"ID: {id_equipo}|E: {estado}|PA: 0|PT: {pasos}\n"
+    tipo, contenido = oracion[1:].split(",", 1)
+    if tipo == "SD":
+        partes = contenido.split(",", 5)
+        mensaje_procesado["id_equipo"] = 1
+        mensaje_procesado["caudal_agua"] = float(partes[0])
+        mensaje_procesado["temp"] = float(partes[1])
+        mensaje_procesado["nivel"] = float(partes[2])
+        mensaje_procesado["rele"] = 1 if (str(partes[3]) == "ON") else 0
+        mensaje_procesado["pasos_agua"] = int(partes[4])
+        mensaje_procesado["pasos_tinta"] = int(partes[5])
+        return mensaje_procesado
+
+    elif tipo == "ERR":
+        comando, motivo = contenido.split(",", 1)
+        mensaje_procesado["mensaje"] = f"**ERROR** Código:{comando}. Motivo: {motivo}."
+        print(mensaje_procesado)
+        return mensaje_procesado
+
+    elif tipo == "ACK":
+        comando, estado = contenido.split(",", 1)
+        mensaje_procesado["mensaje"] = f"El {comando} se envió correctamente. Estado: {estado}"
+        print(mensaje_procesado)
+        return mensaje_procesado
+        
     else:
-        return "Comando incorrecto"    
-    await socket_arduino.enviar(mensaje.encode("utf-8"))
-    return "Comando exitoso"
+        mensaje_procesado["mensaje"] = f"{mensaje_procesado}"
+        return mensaje_procesado
 
 
-def procesar_lectura(linea: str):
-    #        ESTADO|    CAUDAL|TEMP     |    CANT.PASOS M1| CANT. PASOS M2|ESTADO DEL RELE   |
-    #        "E:ERR|     C:5.42|T:22.5   |            M1:10|         M2:300|R:ON             | 
-      
-    # ejemplo de envío de arduino = "E:ON|C:5.42|T:22.5|M1:10|M2:300|R:ON\n"
-    datos = {}
-    partes = linea.strip().split('|')
-    
-    for  in partes:
-        clave, valor = parte.split(':')
-        datos[clave] = float(valor)
-    
-    return datos 
-    # Resultado: {"C": 5.42, "T": 22.5, "N": 45.0, ...}
-"""
+def calcular_checksum(oracion):
+    checksum = 0
+    for letra in oracion:
+        checksum ^= ord(letra)
+    return f"{checksum:02X}"

@@ -3,57 +3,99 @@ import './style.css'
 // Importo la variable de entorno de la dirección del Weboscket
 const WS_URL = import.meta.env.VITE_WS_URL
 const CAMARA_URL = import.meta.env.VITE_CAMARA_URL
+
+
+const contenedorTerminal = document.getElementById("mensajes-terminal")
+
 const ws = new WebSocket(WS_URL);
+const nuevoElemento = document.createElement("p");
+const tiempo = obtenerHora();
+nuevoElemento.innerHTML = `<span>[${tiempo}]</span> La conexión con el servidor se estableció correctamente.`;
+contenedorTerminal.appendChild(nuevoElemento);
+contenedorTerminal.scrollTop = contenedorTerminal.scrollHeight;
 
-// Probando cosas
-/* ws.addEventListener("message", (evento) => {
-    console.log(typeof evento.data);
-    console.log(evento.data)
-});
 
-*/
+
+
+const caudal = document.getElementById("caudal_valor");
+caudal.innerText = "Sin datos";
+
+const temp = document.getElementById("temp_valor");
+temp.innerText = "Sin datos";
+
+const rele = document.getElementById("rele_estado");
+rele.innerText = "Sin datos";
+
+const pasosAgua = document.getElementById("pasos_agua");
+pasosAgua.value = "0";
+
+const pasosTinta = document.getElementById("pasos_tinta");
+pasosTinta.value = "0";
+
+
 
 ws.addEventListener("message", (evento) => {
-    const datos = JSON.parse(evento.data);
-    console.log(JSON.parse(evento.data));
-    console.log(typeof evento.data);
-    console.log(typeof JSON.parse(evento.data));
-
-
-    //document.getElementById('pasos_agua').value = datos.PA;
-    //document.getElementById('pasos_tinta').value = datos.PT;
-    if (datos.CA) {
-        document.getElementById('caudal_valor').innerText = datos.CA;
-    } else {
-        document.getElementById('caudal_valor').innerText = "Sin datos";
-    }
-    if (datos.T) {
-        document.getElementById('temp_valor').innerText = datos.T;
-    } else {
-        document.getElementById('temp_valor').innerText = "Sin datos";
-    }
+    console.log(evento.data.trim());
+    const datos = JSON.parse(evento.data.trim());
     
-    if (datos.R == "1") {
-        document.getElementById('rele_estado').innerText = "Encendido"; 
-    } else {
-        document.getElementById('rele_estado').innerText = "Apagado";        
+    console.log(datos);
+
+    if (datos.caudal_agua != undefined) {
+        caudal.innerText = datos.caudal_agua;
     }
+
+    if (datos.temp != undefined) {
+        temp.innerText = datos.temp;
+    }     
+
+    if (datos.rele == 1) {
+        rele.innerText = "Encendido"; 
+    } else if (datos.rele == 0) {
+        rele.innerText = "Apagado";        
+    }
+
+    if (datos.pasos_agua != undefined) {
+        pasosAgua.value = datos.pasos_agua; 
+    }
+    if (datos.pasos_tinta != undefined) {
+        pasosTinta.value = datos.pasos_tinta; 
+    }
+
+    if (datos.mensaje != undefined) {
+        const nuevo_elemento = document.createElement('p');
+        const tiempo = obtenerHora();
+        nuevo_elemento.innerHTML = `<span>[${tiempo}]</span> ${datos.mensaje}`;
+        contenedorTerminal.appendChild(nuevo_elemento);
+
+        contenedorTerminal.scrollTop = contenedorTerminal.scrollHeight;
+    }
+
 });
 
+function obtenerHora() {
+    const fecha = new Date();
+    const hora = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    const segundos = fecha.getSeconds().toString().padStart(2, '0');
+    return `${hora}:${minutos}:${segundos}`
+}
 
 async function conectar() {
+    const nuevo_elemento = document.createElement("p");
+    const tiempo = obtenerHora();
+
     try {   
         const pc = new RTCPeerConnection();
         pc.addEventListener('track', (evento) => {
-            const webrtc_stream = document.getElementById('stream');
+            const webrtc_stream = document.getElementById('video-stream');
             webrtc_stream.srcObject = evento.streams[0];
         });
-
+        
         pc.addTransceiver("video", { direction: "recvonly"});
 
         const oferta = await pc.createOffer();
         await pc.setLocalDescription(oferta);
-
+        
         const respuesta = await fetch(CAMARA_URL, {
             method: "POST",
             body: oferta.sdp,
@@ -68,8 +110,16 @@ async function conectar() {
             
         console.log("Conexión WebRTC establecida con éxito");
 
+        
+        nuevo_elemento.innerHTML = `<span>[${tiempo}]</span> La conexión de la cámara fue establecida con éxito`;
+        contenedorTerminal.appendChild(nuevo_elemento);
+        contenedorTerminal.scrollTop = contenedorTerminal.scrollHeight;
+
     } catch (error) {
         console.error("Fallo al conectar:", error);
+        nuevo_elemento.innerHTML = `<span>[${tiempo}]</span> La conexión de la cámara no se pudo establecer`;
+        contenedorTerminal.appendChild(nuevo_elemento);
+        contenedorTerminal.scrollTop = contenedorTerminal.scrollHeight;
     }
 }
 
@@ -80,33 +130,52 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-const pasos_agua = document.getElementById('pasos_agua');
-pasos_agua.addEventListener("change", (evento) => {
+pasosAgua.addEventListener("change", (evento) => {
     const nuevo_valor = evento.target.value;
-    ws.send(`ID:1|E:encendido|PA:${nuevo_valor}\n`);
+
+    const mensaje = {
+        id_equipo: 1,
+        pasos_agua: Number(nuevo_valor)
+    };
+    console.log(mensaje);
+    ws.send(JSON.stringify(mensaje));
 });
 
-const pasos_tinta = document.getElementById('pasos_tinta');
-pasos_tinta.addEventListener("change", (evento) => {
+
+pasosTinta.addEventListener("change", (evento) => {
     const nuevo_valor = evento.target.value;
-    ws.send(`ID:1|E:encendido|PT:${nuevo_valor}\n`);
+
+    const mensaje = {
+        id_equipo: 1,
+        pasos_tinta: Number(nuevo_valor)
+    };
+    console.log(mensaje);
+    ws.send(JSON.stringify(mensaje));
 });
 
 
 
 
 async function obtenerDatos() {
-    const url = 'http://localhost:8000/equipos/estado';
+    const mensaje = {
+        id_equipo: 1,
+        pasos_agua: 0,
+        pasos_tinta: 0,
+        rele: 0,
+    };
+    console.log(mensaje);
+    ws.send(JSON.stringify(mensaje));
+    rele.innerText = "Apagado";
+    temp.innerText = "Sin datos";
+    caudal.innerText = "Sin datos";
+    pasosAgua.value = 0;
+    pasosTinta.value = 0;
 
-    const respuesta = await fetch(url, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({id_equipo: 1, estado: "encendido"})
-    });
-
+    
 };
+ 
 
-const info = document.getElementById('conectar');
+const info = document.getElementById('boton-restablecer');
 
 info.onclick = obtenerDatos;
 

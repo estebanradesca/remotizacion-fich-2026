@@ -64,13 +64,13 @@ class SocketArduino:
             if not datos:  
                 print("Módulo del Arduino desconectado, no se están recibiendo datos desde el Arduino")
                 break 
-            
             self.buffer += datos
-
+            
             while b"\n" in self.buffer:
                 texto, self.buffer = self.buffer.split(b"\n", 1)
                 # El mensaje viene en bytes y lo mando para que se procese
                 # y se envíe por el websocket a través de la función callback 
+                
                 await self.callback(texto)
     
     # La funcion callback me va a servir para procesar el mensaje 

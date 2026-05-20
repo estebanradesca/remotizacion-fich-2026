@@ -12,61 +12,153 @@ body {
 /* Encabezado */
 header { 
     background-color: #0061ae;
+    border: 2px solid #333c4e;
 }
 
 .titulo {
-    color: #fff;
+    color: white;
     text-align: center;
 }
 
 /* Pie de página */
 
 footer {
-    font-size: 13px;
+    font-size: 0.8rem;
     font-weight: bold;
     text-align: right;
     color: #c8c8c8;
-    padding-right: 1%;
+    padding-right: 1rem;
     background-color: #333c4e;
 }
 
-.conexion{
-    text-align: center;
+
+/* Botones */
+
+button {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #0061ae;
+    background: white;
+    color: #0061ae;
+    transition: 0.2s;
 }
 
-img {
-    width: 100%;
-    height: auto;
+button:hover {
+    background-color: #0061ae;
+    color: white;
 }
 
-.estructura {
+
+/* Estructura general */
+
+#contenedor-estructura {
     display: flex;
-    margin: 1%;
+    margin: 0 1rem 1rem 1rem;
 }
 
-.camara {
+/* Sección de la cámara */
+
+#seccion-camara {
     flex: 70%;
-    text-align: center;
+    text-align: center; 
+    margin: 0 2rem; 
 }
 
-.controles {
-    flex: 30%;
-    text-align: center;
+#contenedor-video {
+    background-color: #c8c8c8;
+    border: 2px solid #333c4e;
+    padding: 0;
+    border-radius: 8px;
+    margin: 0;
+    overflow: hidden;
 }
 
-.control {
+#video-stream { 
+    display: block;
+}
+
+/* Sección de los controles y valores del experimento */
+
+#seccion-controles {
+    flex:30%;
+    text-align: center;
+    padding: 0;
+    margin: 0 2rem 0 1rem; 
+}
+
+
+.contenedor-control {
     display: flex;
     flex-direction: row;
-    gap: 5px;
-    margin: 0 10%; 
-}
-
-.parametros {
-    margin: 0 10%;
-    text-align: left;
-}
-
-.captura {
+    width: 100%;
+    gap: 1rem;
+    justify-content: space-between;
     text-align: center;
-    margin: 0 0 20px 0;
+    border-bottom: 1px solid #0061ae;
+    align-items: center;
+    padding: 1rem 0 0.5rem 0;
+}
+
+#pasos_agua {
+    width: 100%;
+}
+#pasos_tinta {
+    width: 100%;
+}
+
+.datos {
+    display: flex;
+    padding: 1rem 0 0.5rem;
+    border-bottom: 1px solid #0061ae;
+    justify-content: space-between;
+    margin: 0;
+}
+
+#boton-restablecer { 
+    margin: 1.5rem;
+}
+
+
+/* Terminal de mensajes */
+
+#mensajes-terminal {
+    background-color: #f8f8f8; 
+    color: #0061ae;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    padding: 0.1rem;
+    border-radius: 8px;
+    border: 2px solid #333c4e;
+    margin: 0 0rem;
+    text-align: left;
+    
+    /* Para que el contenido no se salga si hay muchos mensajes */
+    max-height: 4rem;
+    overflow-y: auto;    
+}
+
+/* Estilo para los párrafos dentro del log */
+#mensajes-terminal p {
+    margin: 0.1rem 0;
+    gap: 1rem;
+    padding-bottom: 0.1rem;
+    font-size: 10px;
+}
+
+/* Personalizar la barra de scroll para que no rompa la estética */
+#mensajes-terminal::-webkit-scrollbar {
+    width: 4px;
+}
+#mensajes-terminal::-webkit-scrollbar-thumb {
+    background: #f8f8f8;
+    border-radius: 5px;
+}
+
+#contenedor-guardar {
+    padding: 0.8rem;
+    text-align: center;
+}
+
+* {
+    box-sizing: border-box; /* Hace que el padding no sume ancho al elemento */
 }

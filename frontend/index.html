@@ -16,10 +16,11 @@
         
         -->
         <!-- Fuente Lato-->
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-        
+   
     </head>
     <body>
     <!-- Encabezado -->
@@ -28,46 +29,41 @@
         </header>
 
         <main>             
+            <div id="contenedor-estructura">
+                <section id="seccion-camara">
+                    <h3>Cámara</h3>
+                    <div id="contenedor-video">
+                    <video id="video-stream" autoplay playsinline controls muted width="100%"></video>
+                    </div>
+                </section>
 
-            <div class="estructura">
-                <div class="camara">
-                    <h3>Cámara 1</h3>
-                    <!--       
-                    <img src="/reynolds.png" alt="Equipo de Reynolds"/>
-                    -->
-                    <video id="stream" autoplay playsinline controls muted width="100%"></video>
-                </div>
+                <aside id="seccion-controles">
+                    <h3>Datos de control</h3>
 
-                <div class="controles">
-                    <h3>Datos</h3>
-                    <button id="conectar">Restablecer</button>
-
-                    <p id="estado"></p>
-                    <div class="control">
-                        <p>Agua</p>
-                        <input type="range" id="pasos_agua" min="0" max="500" step="1" value="0">
+                    <div class="contenedor-control">
+                        <label for="pasos_agua">Agua</label>
+                        <input type="range" id="pasos_agua" min="0" max="600" step="1" value="0">
                     </div>
 
-                    <div class="control">
-                        <p>Tinta</p>
+                    <div class="contenedor-control">
+                        <label for="pasos_tinta">Tinta</label>
                         <input type="range" id="pasos_tinta" min="0" max="50" step="1" value="0">
                     </div>
 
-                    <div class="parametros">
-                        <p id="contenedor_ado"></p>
-                        <p>Caudal: <span id="caudal_valor"></span></p>
-                        <p>Temperatura: <span id="temp_valor"> </span></p>
-                        <p>Relé: <span id="rele_estado"></span></p>
-                        <p>Mensajes:</p>
-                        <p id="mensajes">
-                        </p>
-                        <p></p>
+                    <p class="datos"><span>Caudal</span><strong><span id="caudal_valor">0</span> L/s</strong></p>
+                    <p class="datos"><span>Temperatura</span><strong><span id="temp_valor">0</span> °C</strong></p>
+                    <div class="datos"><span>Depósito de agua</span><strong id="rele_estado">Luz</strong>
+                       <button id="rele-cambiar">Encender</button> 
                     </div>
-                </div>
+                    <button id="boton-restablecer">Apagar</button>
+                    <div id="mensajes-terminal">
+            </div>
+                </aside>
             </div>
 
-            <div class="captura">
-                <button>Guardar</button>
+            
+            <div id="contenedor-guardar">
+                <button id="boton-guardar">Guardar</button>
             </div>
                     
         </main>
