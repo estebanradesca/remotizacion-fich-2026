@@ -1,13 +1,6 @@
 import socket
 import json
 
-async def cambiar_estado_servicio(id_equipo, estado, socket_arduino):
-    mensaje = "{" + f"\"id_equipo\":{id_equipo}, \"pasos_agua\":0, \"pasos_tinta\":0" + "}\n"
-    
-    await socket_arduino.enviar(mensaje.encode("utf-8"))
-    return "Comando exitoso"
-
-
 async def enviar_comando_al_arduino(comando: str, socket_arduino):
     comando_dict = json.loads(comando)
     if comando_dict.get("pasos_agua") is not None:
@@ -23,28 +16,56 @@ async def enviar_comando_al_arduino(comando: str, socket_arduino):
         mensaje_procesado = mensaje + "*" + checksum + "\n"
         await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
     if comando_dict.get("rele") is not None:
-
         estado = comando_dict["rele"]
 
         if estado == 0:
             mensaje = "$RELE,OFF"
-            print("llegue hasta aca")
         else:
             mensaje = "$RELE,ON"
         checksum = calcular_checksum(mensaje[1:])
         mensaje_procesado = mensaje + "*" + checksum + "\n"
         await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+    
+    if comando_dict.get("motores") is not None:
+        await habilitar_motores(socket_arduino)
+    if comando_dict.get("datos") is not None:
+        await obtener_datos(socket_arduino)
+    
+    
+
+
+async def habilitar_motores(socket_arduino):
+    mensajes = ["$M1,ENABLE,1", "$M2,ENABLE,1"]
+    for mensaje in mensajes:
+        checksum = calcular_checksum(mensaje[1:])
+        mensaje_procesado = mensaje + "*" + checksum + "\n"
+        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+        
+        
+        
+
+# Acá envío los motores a 0 pasos y luego los deshabilito
+async def deshabilitar_motores(socket_arduino):
+    mensajes = ["$M1,HOME", "$M2,HOME", "$M1,ENABLE,0", "$M2,ENABLE,0"]
+    for mensaje in mensajes:
+        checksum = calcular_checksum(mensaje[1:])
+        mensaje_procesado = mensaje + "*" + checksum + "\n"
+        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+        print("mensaje ", mensaje_procesado)
+
+async def obtener_datos(socket_arduino):
+    mensaje = "$GET"
+    checksum = calcular_checksum(mensaje[1:])
+    mensaje_procesado = mensaje + "*" + checksum + "\n"
+    await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
 
 
 
 def procesar_mensaje_de_arduino(mensaje: str) -> dict:
+    print(mensaje)
     mensaje_procesado = {}
-    
 
-    oracion, checksum = mensaje.split("*", 1)
-
-    
-    
+    oracion, checksum = mensaje.split("*", 1)    
 
     checksum_calculado = calcular_checksum(oracion[1:])
 
@@ -61,27 +82,24 @@ def procesar_mensaje_de_arduino(mensaje: str) -> dict:
         mensaje_procesado["temp"] = float(partes[1])
         mensaje_procesado["nivel"] = float(partes[2])
         mensaje_procesado["rele"] = 1 if (str(partes[3]) == "ON") else 0
-        mensaje_procesado["pasos_agua"] = int(partes[4])
-        mensaje_procesado["pasos_tinta"] = int(partes[5])
+        mensaje_procesado["pasos_tinta"] = int(partes[4])
+        mensaje_procesado["pasos_agua"] = int(partes[5])
+        print(mensaje_procesado)
         return mensaje_procesado
 
     elif tipo == "ERR":
         comando, motivo = contenido.split(",", 1)
-        mensaje_procesado["mensaje"] = f"**ERROR** Código:{comando}. Motivo: {motivo}."
-        print(mensaje_procesado)
+        mensaje_procesado["mensaje"] = f"**ERROR** Comando:{comando}. Motivo: {motivo}."
         return mensaje_procesado
 
     elif tipo == "ACK":
         comando, estado = contenido.split(",", 1)
-        mensaje_procesado["mensaje"] = f"El {comando} se envió correctamente. Estado: {estado}"
-        print(mensaje_procesado)
+        mensaje_procesado["mensaje"] = f"**RECIBIDO** Comando: {comando}. Estado: {estado}."
         return mensaje_procesado
-        
+
     else:
-        mensaje_procesado["mensaje"] = f"{mensaje_procesado}"
-        return mensaje_procesado
-
-
+        return 
+        
 def calcular_checksum(oracion):
     checksum = 0
     for letra in oracion:

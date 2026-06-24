@@ -72,10 +72,15 @@ button:hover {
     border-radius: 8px;
     margin: 0;
     overflow: hidden;
+    aspect-ratio: 16 / 9;
 }
 
 #video-stream { 
     display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
 /* Sección de los controles y valores del experimento */
@@ -100,8 +105,7 @@ button:hover {
     padding: 1rem 0 0.5rem 0;
 }
 
-#pasos_agua, 
-#deslizador-pasos-agua {
+#pasos_agua {
     width: 100%;
 }
 #pasos_tinta {
@@ -134,7 +138,7 @@ button:hover {
     text-align: left;
     
     /* Para que el contenido no se salga si hay muchos mensajes */
-    max-height: 4rem;
+    height: 5em;
     overflow-y: auto;    
 }
 
@@ -174,16 +178,43 @@ button:hover {
 }
 
 
-.rele_apagado {
-  background-color: red; 
+
+#botones-zoom {
+    padding-top: 0.5em;
 }
-
-
-.rele_encendido {
-  background-color: green; 
-}
-
 
 * {
     box-sizing: border-box; /* Hace que el padding no sume ancho al elemento */
+}
+
+
+#contenedor-captura {
+    text-align: center;
+    justify-content: center;
+    padding-top: 0.5em;
+}
+
+#deposito {
+    font-size: smaller;
+}
+
+#rele-cambiar {
+    size-adjust: 10%;
+    padding: 4px 8px;
+    font-size: smaller;  
+    line-height: 1;
+    border-color: #333c4e;
+    border-width: 0.3cap;
+    background-color: rgb(27, 160, 38);
+    color: white;
+    font-weight: bold;
+}
+
+.apagado {
+    background-color: rgb(240, 31, 31) !important;
+}
+
+#disminuir-zoom,
+#aumentar-zoom {
+    padding: 4px 8px;    
 }

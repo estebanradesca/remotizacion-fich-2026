@@ -9,17 +9,6 @@ class Estado(str, Enum):
 
 Id = Annotated[int, Field(ge=1, le=5)]
 
-# Se envían desde la web
-"""
-class ModificarPasosAgua(BaseModel):
-    id_equipo: Id
-    pasos: Annotated[int, Field(ge=0, le=600)]
-
-class ModificarPasosTinta(BaseModel):
-    id_equipo: Id
-    pasos: Annotated[int, Field(ge=0, le=50)]
-"""
-
 class CambiarEstado(BaseModel):
     id_equipo: Id
     estado: Estado 

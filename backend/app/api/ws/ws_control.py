@@ -1,40 +1,43 @@
 from fastapi import WebSocket
 import asyncio
-from app.services.equipos import procesar_mensaje_de_arduino
+from app.services.reynolds import procesar_mensaje_de_arduino
 
 class ControlConexion:
     def __init__(self):
-        self.websocket_clientes: list[WebSocket] = [] # Es una lista ya que pueden ser varios clientes
-    
-    # Conecta el cliente 
-    async def conectar(self, websocket: WebSocket):
+        # Es una lista de los adminstradores de los 3 equipos
+        self.websocket_admin: list[WebSocket | None] = [None] * 3 
+
+    # Conecta el administrador del equipo 
+    async def conectar(self, id_equipo: int, websocket: WebSocket):
         await websocket.accept()
-        print(websocket)
-        self.websocket_clientes.append(websocket)
-        print(f"Cliente conectado. Total: {len(self.websocket_clientes)}")
+        self.websocket_admin[id_equipo] = websocket 
+        print(f"Administrador conectado al equipo número {id_equipo}")
     
-    # Desconecta al cliente
-    def desconectar(self, websocket: WebSocket):
-        if websocket in self.websocket_clientes:
-            self.websocket_clientes.remove(websocket)
-            print(f"Cliente eliminado de la lista de clientes. Total: {len(self.websocket_clientes)}")
+    # Desconecta al administrador del equipo
+    def desconectar(self, id_equipo: int, websocket: WebSocket):
+        self.websocket_admin[id_equipo] = None
+        print(f"Administrador desconectado del equipo número {id_equipo}")
     
-    # Envío los datos desde el servidor a los clientes
-    async def difundir(self, mensaje: dict):      
-        for cliente in self.websocket_clientes:
-            try:
-                await cliente.send_json(mensaje)
-                print("Se envió el mensaje :", mensaje)
-            except:
-                print(f"No se pudo enviar el mensaje al cliente {cliente}, eliminando...")
-                self.desconectar(cliente)
+    # Envío los datos desde el servidor al administrador
+    async def difundir(self, mensaje: dict, id_equipo: int):
+        cliente = self.websocket_admin[id_equipo] 
+        if cliente is None: 
+            return
+        try:
+            await cliente.send_json(mensaje) 
+        except Exception as error:
+            print(f"No se pudo enviar el mensaje al administrador {cliente} del equipo número {id_equipo}, removiendo... Error: {error}")
+            self.desconectar(id_equipo, cliente)
 
 # Instancia global del controlador del websocket 
 controlador_ws = ControlConexion()    
 
 # Callback para enviar mensaje a los clientes web que llega al servidor desde el Arduino  
-async def recibo_mensaje_de_arduino(datos: bytes):
+async def recibo_mensaje_de_arduino(datos: bytes, id_equipo):
     datos = datos.strip()
     mensaje = datos.decode("utf-8")
-    mensaje_procesado = procesar_mensaje_de_arduino(mensaje) 
-    await controlador_ws.difundir(mensaje_procesado)
+    mensaje_procesado = procesar_mensaje_de_arduino(mensaje)
+    if mensaje_procesado is None:
+        return
+    await controlador_ws.difundir(mensaje_procesado, id_equipo)
+    

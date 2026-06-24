@@ -6,10 +6,11 @@ import asyncio
 load_dotenv()
 
 class SocketArduino:
-    def __init__(self):
+    def __init__(self, id_equipo: int):
         self.HOST_ARDUINO = os.getenv("HOST_ARDUINO")
         self.PUERTO_ARDUINO = int(os.getenv("PUERTO_ARDUINO"))
         self.socket_arduino = None
+        self.id_equipo = id_equipo
         self.buffer = b"" # Buffer de recepción
         self.escuchando = False
         self.callback = lambda x: asyncio.sleep(0)
@@ -29,7 +30,8 @@ class SocketArduino:
             self.escuchando = True
 
         except Exception as error:
-            self.socket_arduino = None
+            self.socket_arduino.close()
+            self.socket_arduino = None            
             raise Exception(f"Error conectando al módulo del Arduino: {error}")
 
     # Cierre de la conexión con el módulo
@@ -71,13 +73,11 @@ class SocketArduino:
                 # El mensaje viene en bytes y lo mando para que se procese
                 # y se envíe por el websocket a través de la función callback 
                 
-                await self.callback(texto)
+                await self.callback(texto, self.id_equipo)
     
     # La funcion callback me va a servir para procesar el mensaje 
     # y enviar por el websocket lo que viene desde el módulo del 
     # Arduino
 
-    ### Podría poner el tipo función
-
-    def funcion_callback(self, fun):
-        self.callback = fun
+    def funcion_callback(self, funcion):
+        self.callback = funcion

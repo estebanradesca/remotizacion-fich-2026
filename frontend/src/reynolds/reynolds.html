@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <!-- 
+        Agregar favicon después
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Experimento de Reynolds</title>
+
+        <!-- CSS -->
+        <!--No es necesario vite lo importa directamente
+
+        <link rel="stylesheet" href="src/style.css"/> 
+        
+        -->
+        <!-- Fuente Lato-->
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+   
+    </head>
+    <body>
+    <!-- Encabezado -->
+        <header>
+            <h1 class="titulo">Experimento de Reynolds</h1>
+        </header>
+
+        <main>             
+            <div id="contenedor-estructura">
+                <section id="seccion-camara">
+                    <h3>Cámara</h3>
+                    <div id="contenedor-video">
+                    <video id="video-stream" autoplay playsinline controls muted></video>
+                    </div>
+                    <div id="botones-zoom">
+                    <button id="disminuir-zoom">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="6"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                    <button id="aumentar-zoom">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="6"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                        </svg>
+                    </button>
+                    </div>
+                    <div id="contenedor-captura">
+                        <button id="boton-captura">Guardar</button>
+                     </div>
+                </section>
+
+                <aside id="seccion-controles">
+                    <h3>Datos de control</h3>
+
+                    <div class="contenedor-control">
+                        <label for="pasos_tinta">Tinta</label>
+                        <button id="menos_pasos_tinta">-</button>
+                        <input type="range" id="pasos_tinta" min="0" max="50" step="1" value="0">
+                        <button id="mas_pasos_tinta">+</button>
+                    </div>
+
+                    <div class="contenedor-control">
+                        <label for="pasos_agua">Agua</label>
+                        <button id="menos_pasos_agua">-</button>
+                        <input type="range" id="pasos_agua" min="0" max="600" step="1" value="0">
+                        <button id="mas_pasos_agua">+</button>
+                    </div>
+
+                    
+
+                    <p class="datos"><span>Caudal</span><strong><span id="caudal_valor">0</span> L/s</strong></p>
+                    <p class="datos"><span>Temperatura</span><strong><span id="temp_valor">0</span> °C</strong></p>
+                    <p class="datos"><span>Diametro</span><strong>25 mm</strong></p>
+                    <p class="datos"><span>Viscocidad</span><strong>0.1 Pa⋅s</strong></p>
+                    <div id="mensajes-terminal">
+                    </div>
+                    <div class="datos" id="deposito"><span>Depósito de agua</span>
+                        <span>
+                        <!-- <button id="led_rele" class="rele_apagado"></button> -->
+                        <button id="rele-cambiar">Apagado</button> 
+                        </span>
+                    </div>
+                </aside>
+            </div>            
+            
+                    
+        </main>
+        
+        <!-- Pie de página -->
+        <footer>
+            <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
+        </footer>
+
+        <!-- JS -->
+        <script type="module" src="./reynolds.js" defer></script>
+    </body>
+</html>
