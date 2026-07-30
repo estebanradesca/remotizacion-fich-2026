@@ -29,22 +29,19 @@
         </header>
 
         <main>             
-            <div id="contenedor-estructura">
-                <section id="seccion-camara">
-                    <h3>Panel</h3>
-                    <div id="contenedor-video">
+            <div id="cont-general">
+                <div id="cont-observaciones">
+                  <h4>Panel</h4>
+                  <div id="cont-panel">
                         
-                    <!-- Panel de tuberías -->
                         
-
-
-
-                        <svg
+                     <!-- Panel de tuberías -->
+                     <svg
                            version="1.1"
                            id="svg1"
-                           width="950"  
-                           height="450"
-                           viewBox="0 0 1010 353.45599"
+                           width="920"  
+                           height="350"
+                           viewBox="0 0 1010 350"
                            inkscape:version="1.4.2 (ebf0e94, 2025-05-08)"
                            sodipodi:docname="panel.svg"
                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1906,44 +1903,134 @@
                                  x="59.502655"
                                  y="76.160301">Cañería N°3</tspan></text>
                         </g>
-                        </svg>
+                     </svg>
+                  </div>
 
-                    
+                  <div id="cont-camaras-crono">
+                     <div id="cont-camara-1">
+                        <h4>Caudal</h4>
+                        <div class="cont-video">
+                           <video id="video-stream-1" autoplay playsinline muted></video>
+                        </div>
+                     </div>
+                        <div id="cont-general-crono">
+                           <h4>Cronómetro</h4>
+                           <div>
+                              <div id="cont-crono-botones"> 
+                                 <p id="cont-valor"><span>00:00:00</span></p>
+                                 <div id="crono-botones">
+                                    <button id="iniciar-cronometro">Iniciar</button>
+                                    <button id="parar-cronometro">Parar</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div> 
+                        <div id="cont-camara-2">
+                           <h4 id="tit-presion">Presión</h4>
+                           <div class="cont-video">
+                              <video id="video-stream" autoplay playsinline muted></video>
+                           </div>
+                        </div>                    
+                    </div>
+                               
+                  
 
-                    </div>
-                    
-                </section>
+                  </div>
 
-                <aside id="seccion-controles">
-                    <h3>Datos de control</h3>
-                    <div class="datos"><span>Válvula 1</span>
-                        <button id="boton-valvula-1">Cerrada</button> 
-                        </span>
-                    </div>
-                    <div class="datos"><span>Válvula 2</span>
-                        <button id="boton-valvula-2">Cerrada</button> 
-                        </span>
-                    </div>
-                    <div class="datos"><span>Válvula 3</span>
-                        <button id="boton-valvula-3">Cerrada</button> 
-                        </span>
-                    </div>
-                    <div class="datos"><span>Válvula 4</span>
-                        <button id="boton-valvula-4">Cerrada</button> 
-                        </span>
-                    </div>
-                    <div class="contenedor-control">
-                        <label for='deslizador-pasos-agua'>Bomba</label>
-                        <button id="menos-pasos-agua">-</button>
-                        <input type="range" id='deslizador-pasos-agua' min="0" max="50" step="1" value="0">
-                        <button id="mas-pasos-agua">+</button>
-                    </div>
+               <div id="cont-controles">
+                  <h4>Datos de control</h4>
+                  <div id="cont-manejo-controles"> 
 
-                    <p class="datos"><span>Presión</span><strong><span id="presion">0</span> mBar</strong></p>
-                    <p class="datos"><span>Caudal</span><strong><span id="caudal">0</span> m<sup>3</sup>/s</strong></p>
+                     <div id="cont-reg-caudal">
+                        <span>Regulador de Caudal</span>
+                        <div id="cont-regulador">
+                           <button id="menos-pasos-agua">-</button>
+                           <input type="range" id='desl-pasos-agua' min="0" max="50" step="1" value="0">
+                           <button id="mas-pasos-agua">+</button>
+                        </div>
+                     </div>
 
-                    <div id="mensajes-terminal">
-                    </div>
+                     <div class="datos">
+                        <span>Bomba</span>
+                        <button id="bot-bomba" class="apagado">Apagada</button> 
+                     </div>
+
+
+                     <div class="datos fila-compuesta">
+                        <div class="columna-izquierda">
+                           <span>Cañería 1</span>
+                           <button id="bot-valvula-1" class="apagado">C</button> 
+                        </div>
+                        <div class="columna-derecha">
+                           <div class="sub-fila">                           
+                           <span>Toma</span> 
+                           <button id="bot-toma-1" class="apagado">C</button> 
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="datos fila-compuesta"> 
+                        <div class="columna-izquierda">
+                           <span>Cañería 2</span> 
+                           <button id="bot-valvula-2" class="apagado">C</button> 
+                        </div>
+                        <div class="columna-derecha">
+                           <div class="sub-fila">  
+                           <span>Toma</span>
+                           <button id="bot-toma-2" class="apagado">C</button>  
+                        </div>
+                        </div>
+                     </div>
+
+
+                     <div class="datos fila-compuesta">
+                           <div class="columna-izquierda">
+                           <span>Cañería 3</span>
+                           <button id="bot-valvula-3" class="apagado">C</button>
+                           </div>
+                           
+                           <div class="columna-derecha">
+                              <div class="sub-fila">
+                                 <span>T. Diafragma</span>
+                                 <button id="bot-diafragma" class="apagado">C</button>
+                              </div>
+                              <div class="sub-fila">
+                                 <span>T. Tobera</span>
+                                 <button id="bot-tobera" class="apagado">C</button>
+                              </div>
+                              <div class="sub-fila">
+                                 <span>T. Contracción</span> 
+                                 <button id="bot-contraccion" class="apagado">C</button>
+                              </div>
+                           </div>
+                     </div>
+
+                     <div class="datos fila-compuesta">
+                           <div class="columna-izquierda">
+                           <span>Cañería 4</span>
+                           <button id="bot-valvula-4" class="apagado">C</button>
+                           </div>
+                           
+                           <div class="columna-derecha">
+                              <div class="sub-fila">
+                                 <span>T. Val. Globo </span>
+                                 <button id="bot-v-globo" class="apagado">C</button>
+                              </div>
+                              <div class="sub-fila">
+                                 <span>T. Val. Esclusa</span>
+                                 <button id="bot-v-esclusa" class="apagado">C</button>
+                              </div>
+                              <div class="sub-fila">
+                                 <span>T. Expansión</span> 
+                                 <button id="bot-expansion" class="apagado">C</button>
+                              </div>
+                           </div>
+                     </div>
+                  </div>   
+                  
+                  <div id="cont-terminal">
+                  </div>
+                  </div>
                    
                     
         </main>

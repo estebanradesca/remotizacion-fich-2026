@@ -1,3 +1,4 @@
+import '../style.css'
 import './tuberias.css'
 
 // Variable de entorno de la dirección del Weboscket
@@ -7,9 +8,10 @@ const CAMARA_URL = import.meta.env.VITE_CAMARA_URL
 // Cotrol general
 
 import { conectarWebsocket, agregarTextoTerminal, obtenerHora, ws, 
-    contenedorTerminal} from '../main.js';
+    contenedorTerminal, conectarCamara} from '../main.js';
 
 window.addEventListener('DOMContentLoaded', () => {
+    conectarCamara();
     conectarWebsocket(1);
 });
 
@@ -133,3 +135,46 @@ botonMenosPasos.addEventListener('click', () => {
 botonMasPasos.addEventListener('click', () => {
     modificarBomba(1);
 });
+
+const botonCronometro = document.getElementById('iniciar-cronometro');
+const botonPararCronometro = document.getElementById('parar-cronometro');
+const cronometro = document.getElementById('cronometro');
+
+let intervaloCronometro = null;
+let tiempoInicial = null;
+let tiempoTranscurrido = 0; // Guarda el tiempo acumulado al pausar
+
+function actualizarCronometro() {
+    const tiempoActual = new Date().getTime();
+    const mili = (tiempoActual - tiempoInicial) + tiempoTranscurrido;
+    
+    // Formato mm:ss.sss
+    cronometro.innerHTML = new Date(mili).toISOString().slice(14, 22);
+}
+
+function iniciarCronometro() {
+    // Si ya está corriendo, no hace nada
+    if (intervaloCronometro !== null) return;
+
+    tiempoInicial = new Date().getTime();
+    actualizarCronometro();
+
+    // Actualizamos cada 10ms para una visualización fluida
+    intervaloCronometro = window.setInterval(actualizarCronometro, 10);
+}
+
+function pararCronometro() {
+    if (intervaloCronometro === null) return;
+
+    clearInterval(intervaloCronometro);
+    intervaloCronometro = null;
+
+    // Guardamos el tiempo transcurrido para poder reanudar luego
+    tiempoTranscurrido += new Date().getTime() - tiempoInicial;
+}
+
+// Event Listeners
+botonCronometro.addEventListener('click', iniciarCronometro);
+botonPararCronometro.addEventListener('click', pararCronometro);
+
+const video = document.getElementById('video-stream');

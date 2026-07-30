@@ -1,79 +1,26 @@
-body {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
-    background-color: #f8f8f8;
-    color: #7b8288;
-    font-family: "Lato", sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Encabezado */
-header { 
-    background-color: #0061ae;
-    border: 2px solid #333c4e;
-}
-
-.titulo {
-    color: white;
-    text-align: center;
-}
-
-/* Pie de página */
-
-footer {
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-align: right;
-    color: #c8c8c8;
-    padding-right: 1rem;
-    background-color: #333c4e;
-}
-
-
-/* Botones */
-
-button {
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    border: 1px solid #0061ae;
-    background: white;
-    color: #0061ae;
-    transition: 0.2s;
-}
-
-button:hover {
-    background-color: #0061ae;
-    color: white;
-}
-
-
 /* Estructura general */
 
-#contenedor-estructura {
-    display: flex;
-    margin: 0 1rem 1rem 1rem;
+#cont-general {
+    display: grid;
+    grid-template-columns: 75% 25%;
 }
 
 /* Sección de la cámara */
 
-#seccion-camara {
-    flex: 70%;
+#cont-camara {
     text-align: center; 
-    margin: 0 2rem; 
 }
 
-#contenedor-video {
-    background-color: #c8c8c8;
-    border: 2px solid #333c4e;
-    padding: 0;
-    border-radius: 8px;
-    margin: 0;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
+#cont-camara h4 {
+    margin: 0.5rem 0 0 0;
 }
+
+#cont-video-controles {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+}
+
 
 #video-stream { 
     display: block;
@@ -83,138 +30,69 @@ button:hover {
     transition: transform 0.5s ease;
 }
 
-/* Sección de los controles y valores del experimento */
 
-#seccion-controles {
-    flex:30%;
-    text-align: center;
-    padding: 0;
-    margin: 0 2rem 0 1rem; 
-}
-
-
-.contenedor-control {
+#cont-zoom {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    gap: 1rem;
     justify-content: space-between;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+#bot-dis-zoom {
+    margin: 0rem 0.25rem 0rem 0rem;
+    width: 100%;
+}
+
+#bot-aum-zoom {
+    margin: 0rem 0rem 0rem 0.25rem;
+    width: 100%;
+}
+
+
+#bot-captura {
+    width: 100%;
+}
+
+
+/* Sección de los controles y valores del experimento */
+
+#cont-controles {
     text-align: center;
-    border-bottom: 1px solid #0061ae;
-    align-items: center;
-    padding: 1rem 0 0.5rem 0;
+    padding: 0;
+    margin: 0 1rem 0 1rem;
 }
 
-#pasos_agua {
-    width: 100%;
-}
-#pasos_tinta {
-    width: 100%;
+#cont-controles h4 {
+    margin: 0.5rem 0 0 0;
 }
 
-.datos {
+#cont-manejo-controles {
     display: flex;
-    padding: 1rem 0 0.5rem;
-    border-bottom: 1px solid #0061ae;
+    flex-direction: column;
+    margin: 0.5rem 0 0 0;
+}
+
+#cont-manejo-controles > div {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    margin: 0;
-}
-
-#boton_estado { 
-    margin: 1.5rem;
-}
-
-
-/* Terminal de mensajes */
-
-#mensajes-terminal {
-    background-color: #f8f8f8; 
-    color: #0061ae;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    padding: 0.1rem;
-    border-radius: 8px;
-    border: 2px solid #333c4e;
-    margin: 1.5rem 0rem;
-    text-align: left;
-    
-    /* Para que el contenido no se salga si hay muchos mensajes */
-    height: 5em;
-    overflow-y: auto;    
-}
-
-/* Estilo para los párrafos dentro del log */
-#mensajes-terminal p {
-    margin: 0.1rem 0;
-    gap: 1rem;
-    padding-bottom: 0.1rem;
-    font-size: 10px;
-}
-
-/* Personalizar la barra de scroll para que no rompa la estética */
-#mensajes-terminal::-webkit-scrollbar {
-    width: 4px;
-}
-#mensajes-terminal::-webkit-scrollbar-thumb {
-    background: #f8f8f8;
-    border-radius: 5px;
-}
-
-#contenedor-guardar {
-    padding: 0.8rem;
     text-align: center;
-}
-
-#led_rele {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  border: 2px solid white;
-  transition: all 0.3s ease;
-  cursor: default;
-  pointer-events: none; 
-}
-
-
-
-#botones-zoom {
-    padding-top: 0.5em;
-}
-
-* {
-    box-sizing: border-box; /* Hace que el padding no sume ancho al elemento */
-}
-
-
-#contenedor-captura {
-    text-align: center;
-    justify-content: center;
-    padding-top: 0.5em;
+    align-items: center;
+    border-bottom: 1px solid #0061ae;
+    min-height: 4rem;
 }
 
 #deposito {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     font-size: smaller;
+    align-items: center;
+    padding: 0.2rem;
 }
 
-#rele-cambiar {
-    size-adjust: 10%;
-    padding: 4px 8px;
-    font-size: smaller;  
-    line-height: 1;
-    border-color: #333c4e;
-    border-width: 0.3cap;
-    background-color: rgb(27, 160, 38);
-    color: white;
-    font-weight: bold;
-}
 
-.apagado {
-    background-color: rgb(240, 31, 31) !important;
-}
 
-#disminuir-zoom,
-#aumentar-zoom {
-    padding: 4px 8px;    
-}
+
+

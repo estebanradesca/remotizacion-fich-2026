@@ -1,37 +1,29 @@
+import '../style.css'
 import './reynolds.css'
+
 
 
 // Cotrol general
 
 const video = document.getElementById('video-stream');
 
-const caudal = document.getElementById('caudal_valor');
-caudal.innerText = 'Sin datos';
+const caudal = document.getElementById('valor-caudal');
 
-const temp = document.getElementById('temp_valor');
-temp.innerText = 'Sin datos';
+const temp = document.getElementById('valor-temp');
 
-const pasosAgua = document.getElementById('pasos_agua');
+
+const pasosAgua = document.getElementById('desl-pasos-agua');
 pasosAgua.value = '0';
 
-const pasosTinta = document.getElementById('pasos_tinta');
+const pasosTinta = document.getElementById('desl-pasos-tinta');
 pasosTinta.value = '0';
 
-const masPasosTinta = document.getElementById('mas_pasos_tinta');
-const menosPasosTinta = document.getElementById('menos_pasos_tinta');
-const masPasosAgua = document.getElementById('mas_pasos_agua');
-const menosPasosAgua = document.getElementById('menos_pasos_agua');
+const aumPasosTinta = document.getElementById('bot-aum-pasos-tinta');
+const disPasosTinta = document.getElementById('bot-dis-pasos-tinta');
+const aumPasosAgua = document.getElementById('bot-aum-pasos-agua');
+const disPasosAgua = document.getElementById('bot-dis-pasos-agua');
 
-const rele = document.getElementById('rele-cambiar');
-rele.classList.add('apagado');
-
-// const releLuz = document.getElementById('led_rele');
-
-// Control del streaming de la cámara
-
-// Control del equipo
-// Comunicación bidireccional mediante Websocket
-
+const rele = document.getElementById('bot-rele');
 
 
 import { conectarWebsocket, agregarTextoTerminal, obtenerHora, ws, 
@@ -41,11 +33,10 @@ import { conectarWebsocket, agregarTextoTerminal, obtenerHora, ws,
 
 window.addEventListener('DOMContentLoaded', () => {
     conectarCamara();
-    conectarWebsocket(0);
+    conectarWebsocket(1);
     agregarEscuchaWs();
 });
      
-
 
 pasosAgua.addEventListener('change', (evento) => {
     const nuevo_valor = evento.target.value;
@@ -70,7 +61,7 @@ pasosTinta.addEventListener('change', (evento) => {
     ws.send(JSON.stringify(mensaje));
 });
 
-masPasosAgua.addEventListener('click', (evento) => {
+aumPasosAgua.addEventListener('click', (evento) => {
     if (Number(pasosAgua.value) == 600) {
         return;
     }
@@ -83,7 +74,7 @@ masPasosAgua.addEventListener('click', (evento) => {
     ws.send(JSON.stringify(mensaje));
 });
 
-menosPasosAgua.addEventListener('click', (evento) => {
+disPasosAgua.addEventListener('click', (evento) => {
     if (Number(pasosAgua.value) == 0) {
         return;
     }
@@ -96,7 +87,7 @@ menosPasosAgua.addEventListener('click', (evento) => {
     ws.send(JSON.stringify(mensaje));
 });
 
-masPasosTinta.addEventListener('click', (evento) => {
+aumPasosTinta.addEventListener('click', (evento) => {
     if (Number(pasosTinta.value) == 50) {
         return;
     }
@@ -109,7 +100,7 @@ masPasosTinta.addEventListener('click', (evento) => {
     ws.send(JSON.stringify(mensaje));
 });
 
-menosPasosTinta.addEventListener('click', (evento) => {
+disPasosTinta.addEventListener('click', (evento) => {
     if (Number(pasosTinta.value) == 0) {
         return;
     }
@@ -125,15 +116,17 @@ menosPasosTinta.addEventListener('click', (evento) => {
 
 rele.addEventListener('click', (evento) => {  
     let mensaje;
-    if (rele.innerText == 'Apagado') {
-        rele.innerText = 'Encendido';
+    if (rele.innerText == 'A') {
+        rele.innerText = 'E';
         rele.classList.remove('apagado');
+        rele.classList.add('encendido')
         mensaje = {
             id_equipo: 1,
             rele: 1
         };
     } else {
-        rele.innerText = 'Apagado';
+        rele.innerText = 'A';
+        rele.classList.remove('encendido');
         rele.classList.add('apagado');
         mensaje = {
             id_equipo: 1,
@@ -150,7 +143,7 @@ rele.addEventListener('click', (evento) => {
 
 // Botón de captura de pantalla
 
-const botonCaptura = document.getElementById('boton-captura');
+const botonCaptura = document.getElementById('bot-captura');
 
 botonCaptura.addEventListener('click', () => {
     const captura = document.createElement('canvas');
@@ -193,8 +186,8 @@ function disminuirZoom() {
     }    
 }
 
-const botonAumentarZoom = document.getElementById('aumentar-zoom');
-const botonDisminuirZoom = document.getElementById('disminuir-zoom');
+const botonAumentarZoom = document.getElementById('bot-aum-zoom');
+const botonDisminuirZoom = document.getElementById('bot-dis-zoom');
 
 botonAumentarZoom.addEventListener('click', aumentarZoom);
 botonDisminuirZoom.addEventListener('click', disminuirZoom);
@@ -206,20 +199,22 @@ function agregarEscuchaWs() {
         
         console.log(textoProcesado);
 
-        if (textoProcesado.caudal_agua != undefined) {
-            caudal.innerText = textoProcesado.caudal_agua;
+        if (textoProcesado.nivel != undefined) {
+            caudal.innerText = textoProcesado.nivel;
         }
 
         if (textoProcesado.temp != undefined) {
             temp.innerText = textoProcesado.temp;
         }     
-
+        console.log(textoProcesado.rele);
         if (textoProcesado.rele == 1) {
-            rele.innerText = 'Encendido';
+            rele.innerText = 'E';
             rele.classList.remove('apagado');
+            rele.classList.add('encendido');
         }    
         else if (textoProcesado.rele == 0) {
-            rele.innerText = 'Apagado'; 
+            rele.innerText = 'A'; 
+            rele.classList.remove('encendido');
             rele.classList.add('apagado');   
     
         }

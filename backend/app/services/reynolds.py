@@ -81,7 +81,7 @@ def procesar_mensaje_de_arduino(mensaje: str) -> dict:
         mensaje_procesado["caudal_agua"] = float(partes[0])
         mensaje_procesado["temp"] = float(partes[1])
         mensaje_procesado["nivel"] = float(partes[2])
-        mensaje_procesado["rele"] = 1 if (str(partes[3]) == "ON") else 0
+        mensaje_procesado["rele"] = int(partes[3])
         mensaje_procesado["pasos_tinta"] = int(partes[4])
         mensaje_procesado["pasos_agua"] = int(partes[5])
         print(mensaje_procesado)

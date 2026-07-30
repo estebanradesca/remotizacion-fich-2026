@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
     # Este código se ejecuta antes de iniciar el servidor
 
     try:
-        await iniciar_socket(app, id_equipo = 0)
+        await iniciar_socket(app, id_equipo = 1)
         
         # Controlador del websocket para usarlo como dependencia
         app.state.controlador = controlador_ws

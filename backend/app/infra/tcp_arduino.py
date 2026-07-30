@@ -59,8 +59,8 @@ class SocketArduino:
                 raise Exception("Socket no conectado")
 
         while self.escuchando:
+            
             datos = await asyncio.to_thread(self.socket_arduino.recv, 1024)
-
             # Cuando se desconecta el módulo se recibe b"" a través de recv,
             # por eso utilizo el if de esta forma
             if not datos:  

@@ -24,7 +24,7 @@ class ControlConexion:
         if cliente is None: 
             return
         try:
-            await cliente.send_json(mensaje) 
+            await cliente.send_json(mensaje)
         except Exception as error:
             print(f"No se pudo enviar el mensaje al administrador {cliente} del equipo número {id_equipo}, removiendo... Error: {error}")
             self.desconectar(id_equipo, cliente)

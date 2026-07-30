@@ -2,7 +2,7 @@
 const WS_URL = import.meta.env.VITE_WS_URL
 const CAMARA_URL = import.meta.env.VITE_CAMARA_URL
 
-export const contenedorTerminal = document.getElementById('mensajes-terminal');
+export const contenedorTerminal = document.getElementById('cont-terminal');
 
 export let ws;
 
