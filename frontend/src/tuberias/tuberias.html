@@ -23,6 +23,12 @@
    
     </head>
     <body>
+      <div id="overlay-purga">
+        <div id="mensaje-purga">
+            <h2>Purgando cañerías</h2>
+            <p>Espere unos segundos...</p>
+        </div>
+    </div>
     <!-- Encabezado -->
         <header>
             <h1 class="titulo">Panel de Tuberías</h1>
@@ -1928,7 +1934,7 @@
                         <div id="cont-camara-2">
                            <h4 id="tit-presion">Presión</h4>
                            <div class="cont-video">
-                              <video id="video-stream" autoplay playsinline muted></video>
+                              <video id="video-stream-2" autoplay playsinline muted></video>
                            </div>
                         </div>                    
                     </div>
@@ -1945,7 +1951,7 @@
                         <span>Regulador de Caudal</span>
                         <div id="cont-regulador">
                            <button id="menos-pasos-agua">-</button>
-                           <input type="range" id='desl-pasos-agua' min="0" max="50" step="1" value="0">
+                           <input type="range" id='desl-pasos-agua' min="0" max="1250" step="1" value="0">
                            <button id="mas-pasos-agua">+</button>
                         </div>
                      </div>
@@ -1959,7 +1965,7 @@
                      <div class="datos fila-compuesta">
                         <div class="columna-izquierda">
                            <span>Cañería 1</span>
-                           <button id="bot-valvula-1" class="apagado">C</button> 
+                           <button id="bot-can-1" class="apagado">C</button> 
                         </div>
                         <div class="columna-derecha">
                            <div class="sub-fila">                           
@@ -1972,7 +1978,7 @@
                      <div class="datos fila-compuesta"> 
                         <div class="columna-izquierda">
                            <span>Cañería 2</span> 
-                           <button id="bot-valvula-2" class="apagado">C</button> 
+                           <button id="bot-can-2" class="apagado">C</button> 
                         </div>
                         <div class="columna-derecha">
                            <div class="sub-fila">  
@@ -1986,7 +1992,7 @@
                      <div class="datos fila-compuesta">
                            <div class="columna-izquierda">
                            <span>Cañería 3</span>
-                           <button id="bot-valvula-3" class="apagado">C</button>
+                           <button id="bot-can-3" class="apagado">C</button>
                            </div>
                            
                            <div class="columna-derecha">
@@ -2008,7 +2014,7 @@
                      <div class="datos fila-compuesta">
                            <div class="columna-izquierda">
                            <span>Cañería 4</span>
-                           <button id="bot-valvula-4" class="apagado">C</button>
+                           <button id="bot-can-4" class="apagado">C</button>
                            </div>
                            
                            <div class="columna-derecha">

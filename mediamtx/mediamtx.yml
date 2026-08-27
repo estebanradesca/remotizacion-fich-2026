@@ -807,6 +807,10 @@ paths:
 
   reynolds:
     source: rtsp://reemplazar_desde_script
-    rtspTransport: tcp 
+    rtspTransport: tcp
+  
+  tuberias:
+    source: rtsp://reemplazo
+    rtspTransport: tcp
 
   all_others:

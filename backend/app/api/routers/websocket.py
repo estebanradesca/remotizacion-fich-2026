@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse, Response
 from app.api.dependencies import obtener_socket, obtener_controlador
 from app.infra.tcp_arduino import SocketArduino
 from app.api.ws.ws_control import ControlConexion
-from app.services.reynolds import enviar_comando_al_arduino, deshabilitar_motores
+from app.services.general import enviar_comando_al_arduino, inicio_conexion_equipo, fin_conexion_equipo
 
 router = APIRouter(
     prefix="/ws",
@@ -24,17 +24,18 @@ async def websocket_equipo(
         return 
 
     
-    await controlador.conectar(id_equipo, websocket)    
+    await controlador.conectar(id_equipo, websocket)
+    await inicio_conexion_equipo(id_equipo, socket_arduino)    
 
     # Recibo un comando desde el cliente y lo envío al arduino
     try:
         while True:
             comando = await websocket.receive_text()
-            await enviar_comando_al_arduino(comando, socket_arduino)
+            await enviar_comando_al_arduino(id_equipo, comando, socket_arduino)
                     
     # Si algo falla desconecto al cliente
     except WebSocketDisconnect:
         print(f"Se desconectó el administrador del equipo.")
         controlador.desconectar(id_equipo, websocket)
-        await deshabilitar_motores(socket_arduino)
+        await fin_conexion_equipo(id_equipo, socket_arduino) 
         

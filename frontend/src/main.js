@@ -1,6 +1,5 @@
 // Variable de entorno de la dirección del Weboscket
 const WS_URL = import.meta.env.VITE_WS_URL
-const CAMARA_URL = import.meta.env.VITE_CAMARA_URL
 
 export const contenedorTerminal = document.getElementById('cont-terminal');
 
@@ -15,7 +14,6 @@ export async function conectarWebsocket(id_equipo) {
     
     ws.addEventListener('open', () => {
         agregarTextoTerminal('La conexión con el dispositivo Arduino se estableció correctamente');
-        activarMotores();
     });
 
 }
@@ -39,14 +37,13 @@ export function obtenerHora() {
 }
 
 
-export async function conectarCamara() {
+export async function conectarCamara(CAMARA_URL, webrtc_stream) {
     const nuevo_elemento = document.createElement('p');
     const tiempo = obtenerHora();
     
     try {   
         const pc = new RTCPeerConnection();
         pc.addEventListener('track', (evento) => {
-            const webrtc_stream = document.getElementById('video-stream');
             webrtc_stream.srcObject = evento.streams[0];
         });
         
@@ -85,4 +82,13 @@ function activarMotores() {
         datos: 1
     };
     ws.send(JSON.stringify(mensaje));
+}
+
+
+export function bloquear(elemento) {
+    elemento.disabled = true;
+}
+
+export function desbloquear(elemento) {
+    elemento.disabled = false;
 }

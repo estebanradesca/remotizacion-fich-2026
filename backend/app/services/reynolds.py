@@ -1,101 +1,111 @@
-import socket
 import json
 
+
+# Envío de comandos desde el servidor al arduino
 async def enviar_comando_al_arduino(comando: str, socket_arduino):
-    comando_dict = json.loads(comando)
-    if comando_dict.get("pasos_agua") is not None:
-        pasos = comando_dict["pasos_agua"]
-        mensaje = f"$M2,POS,{pasos}"
-        checksum = calcular_checksum(mensaje[1:])
-        mensaje_procesado = mensaje + "*" + checksum + "\n"
-        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+
+    # Convierto a diccionario el comando que llega desde el websocket
+    comando_dict = json.loads(comando) 
+
+    # Pasos de tinta para el primer motor
     if comando_dict.get("pasos_tinta") is not None:
         pasos = comando_dict["pasos_tinta"]
-        mensaje = f"$M1,POS,{pasos}"
-        checksum = calcular_checksum(mensaje[1:])
-        mensaje_procesado = mensaje + "*" + checksum + "\n"
-        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+        oracion = f"$M1,POS,{pasos}"
+        checksum = calcular_checksum(oracion[1:])
+        oracion += "*" + checksum + "\n"
+        await socket_arduino.enviar(oracion.encode("utf-8"))
+
+    # Pasos de agua para el segundo motor
+    if comando_dict.get("pasos_agua") is not None:
+        pasos = comando_dict["pasos_agua"]
+        oracion = f"$M2,POS,{pasos}"
+        checksum = calcular_checksum(oracion[1:])
+        oracion += "*" + checksum + "\n"
+        await socket_arduino.enviar(oracion.encode("utf-8"))
+    
+    # Activación o desactivación del relé
     if comando_dict.get("rele") is not None:
         estado = comando_dict["rele"]
-
         if estado == 0:
-            mensaje = "$RELE,OFF"
-        else:
-            mensaje = "$RELE,ON"
-        checksum = calcular_checksum(mensaje[1:])
-        mensaje_procesado = mensaje + "*" + checksum + "\n"
-        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
-    
-    if comando_dict.get("motores") is not None:
-        await habilitar_motores(socket_arduino)
+            oracion = "$RELE,OFF"
+        else:   # estado == 1:
+            oracion = "$RELE,ON"
+        checksum = calcular_checksum(oracion[1:])
+        oracion += "*" + checksum + "\n"
+        await socket_arduino.enviar(oracion.encode("utf-8"))
+
     if comando_dict.get("datos") is not None:
         await obtener_datos(socket_arduino)
     
     
 
-
-async def habilitar_motores(socket_arduino):
-    mensajes = ["$M1,ENABLE,1", "$M2,ENABLE,1"]
-    for mensaje in mensajes:
-        checksum = calcular_checksum(mensaje[1:])
-        mensaje_procesado = mensaje + "*" + checksum + "\n"
-        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+# Habilitación de los motores cuando se conecta un cliente
+async def iniciar_equipo(socket_arduino):
+    oraciones = ["$M1,ENABLE,1", "$M2,ENABLE,1"]
+    for oracion in oraciones:
+        checksum = calcular_checksum(oracion[1:])
+        oracion += "*" + checksum + "\n"
+        await socket_arduino.enviar(oracion.encode("utf-8"))
         
         
         
-
+# Deshabilitación de los motores cuando se desconecta el cliente
 # Acá envío los motores a 0 pasos y luego los deshabilito
-async def deshabilitar_motores(socket_arduino):
-    mensajes = ["$M1,HOME", "$M2,HOME", "$M1,ENABLE,0", "$M2,ENABLE,0"]
-    for mensaje in mensajes:
-        checksum = calcular_checksum(mensaje[1:])
-        mensaje_procesado = mensaje + "*" + checksum + "\n"
-        await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
-        print("mensaje ", mensaje_procesado)
+async def fin_conexion_equipo(socket_arduino):
+    oraciones = ["$M1,HOME", "$M2,HOME", "$M1,ENABLE,0", "$M2,ENABLE,0"]
+    for oracion in oraciones:
+        checksum = calcular_checksum(oracion[1:])
+        oracion += "*" + checksum + "\n"
+        await socket_arduino.enviar(oracion.encode("utf-8"))
+
+
 
 async def obtener_datos(socket_arduino):
-    mensaje = "$GET"
-    checksum = calcular_checksum(mensaje[1:])
-    mensaje_procesado = mensaje + "*" + checksum + "\n"
-    await socket_arduino.enviar(mensaje_procesado.encode("utf-8"))
+    oracion = "$GET"
+    checksum = calcular_checksum(oracion[1:])
+    oracion += "*" + checksum + "\n"
+    await socket_arduino.enviar(oracion.encode("utf-8"))
 
 
-
-def procesar_mensaje_de_arduino(mensaje: str) -> dict:
+# Proceso comandos que llegan desde el arduino
+def procesar_mensaje_de_arduino(mensaje):
     print(mensaje)
-    mensaje_procesado = {}
+    
+    
+    oracion = {}
 
-    oracion, checksum = mensaje.split("*", 1)    
-
-    checksum_calculado = calcular_checksum(oracion[1:])
-
+    contenido, checksum = mensaje.split("*", 1)    
+    checksum_calculado = calcular_checksum(contenido[1:])
 
     if checksum != checksum_calculado:
-        mensaje_procesado["mensaje"] = "El mensaje no se envió correctamente desde el Arduino, error de checksum" 
-        return mensaje_procesado
+        oracion["mensaje"] = "El mensaje no se envió correctamente desde el Arduino, error de checksum" 
+        return oracion
 
-    tipo, contenido = oracion[1:].split(",", 1)
+    tipo, contenido = contenido[1:].split(",", 1)
+    
+    # Proceso los mensajes de datos
     if tipo == "SD":
-        partes = contenido.split(",", 5)
-        mensaje_procesado["id_equipo"] = 1
-        mensaje_procesado["caudal_agua"] = float(partes[0])
-        mensaje_procesado["temp"] = float(partes[1])
-        mensaje_procesado["nivel"] = float(partes[2])
-        mensaje_procesado["rele"] = int(partes[3])
-        mensaje_procesado["pasos_tinta"] = int(partes[4])
-        mensaje_procesado["pasos_agua"] = int(partes[5])
-        print(mensaje_procesado)
-        return mensaje_procesado
+        partes = contenido.split(",", 5)   
+        oracion["id_equipo"] = 0 # El equipo de Reynolds es el 0
+        oracion["caudal_agua"] = float(partes[0])
+        oracion["temp"] = float(partes[1])
+        oracion["nivel"] = float(partes[2])
+        oracion["rele"] = int(partes[3])
+        oracion["pasos_tinta"] = int(partes[4])
+        oracion["pasos_agua"] = int(partes[5])
+        return oracion
+
+    
 
     elif tipo == "ERR":
         comando, motivo = contenido.split(",", 1)
-        mensaje_procesado["mensaje"] = f"**ERROR** Comando:{comando}. Motivo: {motivo}."
-        return mensaje_procesado
+        oracion["mensaje"] = f"**ERROR** Comando:{comando}. Motivo: {motivo}."
+        return oracion
 
     elif tipo == "ACK":
         comando, estado = contenido.split(",", 1)
-        mensaje_procesado["mensaje"] = f"**RECIBIDO** Comando: {comando}. Estado: {estado}."
-        return mensaje_procesado
+        oracion["mensaje"] = f"**RECIBIDO** Comando: {comando}. Estado: {estado}."
+        return oracion
 
     else:
         return 

@@ -1,6 +1,6 @@
 from fastapi import WebSocket
 import asyncio
-from app.services.reynolds import procesar_mensaje_de_arduino
+from app.services.general import procesar_mensaje_de_arduino
 
 class ControlConexion:
     def __init__(self):
@@ -36,7 +36,7 @@ controlador_ws = ControlConexion()
 async def recibo_mensaje_de_arduino(datos: bytes, id_equipo):
     datos = datos.strip()
     mensaje = datos.decode("utf-8")
-    mensaje_procesado = procesar_mensaje_de_arduino(mensaje)
+    mensaje_procesado = procesar_mensaje_de_arduino(mensaje, id_equipo)
     if mensaje_procesado is None:
         return
     await controlador_ws.difundir(mensaje_procesado, id_equipo)

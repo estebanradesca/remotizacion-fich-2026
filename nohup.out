@@ -1,0 +1,376 @@
+Arduino IDE 2.3.10
+Checking for frontend application configuration customizations. Module path: /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/electron-main.js, destination 'package.json': /tmp/.mount_arduinjVKWGn/resources/app/package.json
+Setting 'theia.frontend.config.appVersion' application configuration value to: "2.3.10" (type of string)
+Setting 'theia.frontend.config.cliVersion' application configuration value to: "1.5.1" (type of string)
+Setting 'theia.frontend.config.buildDate' application configuration value to: "2026-06-09T16:44:01.600Z" (type of string)
+Frontend application configuration after modifications: {"applicationName":"Arduino IDE","defaultTheme":{"light":"arduino-theme","dark":"arduino-theme-dark"},"defaultIconTheme":"none","electron":{"windowOptions":{},"showWindowEarly":true,"splashScreenOptions":{},"uriScheme":"arduino-ide"},"defaultLocale":"","validatePreferencesSchema":false,"reloadOnReconnect":true,"uriScheme":"theia","preferences":{"window.title":"${rootName}${activeEditorShort}${appName}","files.autoSave":"afterDelay","editor.minimap.enabled":false,"editor.tabSize":2,"editor.scrollBeyondLastLine":false,"editor.quickSuggestions":{"other":false,"comments":false,"strings":false},"editor.maxTokenizationLineLength":500,"editor.bracketPairColorization.enabled":false,"breadcrumbs.enabled":false,"workbench.tree.renderIndentGuides":"none","explorer.compactFolders":false},"appVersion":"2.3.10","cliVersion":"1.5.1","buildDate":"2026-06-09T16:44:01.600Z"}
+Starting backend process. PID: 8123
+Showing main window early
+Using browser-only version of superagent in non-browser environment
+Configuration directory URI: 'file:///home/estebanradesca/.arduinoIDE'
+Configuring to accept webviews on '^.+\.webview\..+$' hostname.
+2026-08-20T12:38:23.744Z root INFO Backend u.initialize: 34.7 ms [Finished 0.911 s after backend start]
+2026-08-20T12:38:23.747Z root INFO Backend Object.initialize: 32.8 ms [Finished 0.911 s after backend start]
+2026-08-20T12:38:23.747Z root INFO Backend a.initialize: 1.3 ms [Finished 0.911 s after backend start]
+2026-08-20T12:38:23.747Z root INFO Backend a.initialize: 1.0 ms [Finished 0.911 s after backend start]
+2026-08-20T12:38:23.747Z root INFO Backend u.initialize: 1.3 ms [Finished 0.911 s after backend start]
+2026-08-20T12:38:23.750Z root INFO Backend l.initialize: 34.0 ms [Finished 0.912 s after backend start]
+2026-08-20T12:38:23.756Z root INFO configured all backend app contributions
+2026-08-20T12:38:23.757Z root INFO Backend l.onStart: 1.2 ms [Finished 0.924 s after backend start]
+2026-08-20T12:38:23.757Z root INFO Backend d.onStart: 0.1 ms [Finished 0.924 s after backend start]
+2026-08-20T12:38:23.758Z root INFO Backend a.onStart: 0.4 ms [Finished 0.925 s after backend start]
+2026-08-20T12:38:23.758Z config INFO >>> Initializing CLI configuration...
+2026-08-20T12:38:23.758Z root INFO Backend x.onStart: 0.4 ms [Finished 0.925 s after backend start]
+2026-08-20T12:38:23.758Z config INFO Loading CLI configuration from /home/estebanradesca/.arduinoIDE/arduino-cli.yaml...
+2026-08-20T12:38:23.758Z daemon INFO Starting daemon from /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/resources/arduino-cli...
+2026-08-20T12:38:23.758Z root INFO Backend w.onStart: 0.4 ms [Finished 0.926 s after backend start]
+2026-08-20T12:38:23.758Z discovery-log INFO start
+2026-08-20T12:38:23.758Z discovery-log INFO start new deferred
+2026-08-20T12:38:23.758Z root INFO Backend v.onStart: 0.3 ms [Finished 0.926 s after backend start]
+2026-08-20T12:38:23.758Z root INFO Backend a.onStart: 0.1 ms [Finished 0.926 s after backend start]
+2026-08-20T12:38:23.763Z root INFO Theia app listening on http://127.0.0.1:44141.
+2026-08-20T12:38:23.763Z root INFO Finished starting backend application: 4.4 ms [Finished 0.931 s after backend start]
+2026-08-20T12:38:23.765Z root WARN The local plugin referenced by local-dir:/home/estebanradesca/.arduinoIDE/plugins does not exist.
+2026-08-20T12:38:23.765Z root WARN The local plugin referenced by local-dir:/home/estebanradesca/.arduinoIDE/deployedPlugins does not exist.
+Restoring workspace roots: /home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias
+isTempSketch: false. Input was /home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias/tuberias.ino
+2026-08-20T12:38:23.846Z config INFO Loaded CLI configuration: {"board_manager":{"additional_urls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"]},"directories":{"builtin":{"libraries":"/home/estebanradesca/.arduino15/libraries"},"data":"/home/estebanradesca/.arduino15","user":"/home/estebanradesca/Arduino"},"locale":"es","network":{"connection_timeout":"300s"}}
+2026-08-20T12:38:23.846Z config INFO 'directories.data' and 'directories.user' are set in the CLI configuration model.
+2026-08-20T12:38:23.846Z config INFO Loaded the CLI configuration.
+2026-08-20T12:38:23.846Z config INFO Mapped the CLI configuration: {"dataDirUri":"file:///home/estebanradesca/.arduino15","sketchDirUri":"file:///home/estebanradesca/Arduino","additionalUrls":["https://espressif.github.io/arduino-esp32/package_esp32_index.json"],"network":"none","locale":"es"}
+2026-08-20T12:38:23.846Z config INFO Validating the CLI configuration...
+2026-08-20T12:38:23.846Z config INFO The CLI config is valid.
+2026-08-20T12:38:23.846Z config INFO <<< Initialized the CLI configuration.
+2026-08-20T12:38:24.645Z root INFO Resolve plugins list: 884.2 ms [Finished 1.812 s after backend start]
+2026-08-20T12:38:24.958Z daemon INFO time="2026-08-20T09:38:24-03:00" level=info msg="arduino-cli version 1.5.1"
+2026-08-20T12:38:24.981Z daemon INFO time="2026-08-20T09:38:24-03:00" level=info msg="Using config file: /home/estebanradesca/.arduinoIDE/arduino-cli.yaml"
+time="2026-08-20T09:38:24-03:00" level=info msg="Executing `arduino-cli daemon`"
+2026-08-20T12:38:24.995Z daemon INFO Daemon is now listening on 127.0.0.1:44095
+{"IP":"127.0.0.1","Port":"44095"}
+2026-08-20T12:38:24.995Z daemon INFO Daemon is running.
+2026-08-20T12:38:25.156Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Checking signature" index=/home/estebanradesca/.arduino15/package_index.json signatureFile=/home/estebanradesca/.arduino15/package_index.json.sig trusted=true
+2026-08-20T12:38:25.208Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/package_esp32_index.json
+2026-08-20T12:38:25.208Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loading hardware from: /home/estebanradesca/.arduino15/packages"
+2026-08-20T12:38:25.236Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loading package arduino from: /home/estebanradesca/.arduino15/packages/arduino/hardware"
+2026-08-20T12:38:25.317Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/arduino/hardware/avr/1.8.8/installed.json
+2026-08-20T12:38:25.362Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded platform" platform="arduino:avr@1.8.8"
+2026-08-20T12:38:25.436Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/installed.json
+2026-08-20T12:38:25.503Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded platform" platform="arduino:renesas_uno@1.6.0"
+time="2026-08-20T09:38:25-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/arduino/tools"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/arduino/tools"
+2026-08-20T12:38:25.513Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:arduinoOTA@1.3.0"
+2026-08-20T12:38:25.520Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:arm-none-eabi-gcc@7-2017q4"
+2026-08-20T12:38:25.531Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:avr-gcc@7.3.0-atmel3.6.1-arduino7"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:avrdude@8.0.0-arduino1"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:bossac@1.9.1-arduino5"
+2026-08-20T12:38:25.542Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:dfu-util@0.11.0-arduino5"
+2026-08-20T12:38:25.551Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="arduino:openocd@0.11.0-arduino2"
+2026-08-20T12:38:25.662Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loading package builtin from: /home/estebanradesca/.arduino15/packages/builtin"
+time="2026-08-20T09:38:25-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/builtin/tools"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/builtin/tools"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:ctags@5.8-arduino11"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:dfu-discovery@0.1.2"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.0.12"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.0.9"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.1.0"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.4.1"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.4.3"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.5.2"
+time="2026-08-20T09:38:25-03:00" level=info msg="Loaded tool" tool="builtin:serial-monitor@0.15.0"
+2026-08-20T12:38:25.663Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Loading package esp32 from: /home/estebanradesca/.arduino15/packages/esp32/hardware"
+2026-08-20T12:38:25.914Z daemon INFO time="2026-08-20T09:38:25-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/esp32/hardware/esp32/3.3.11/installed.json
+2026-08-20T12:38:25.915Z root INFO Deploy plugins list: 2155.3 ms [Finished 3.083 s after backend start]
+2026-08-20T12:38:26.177Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loaded platform" platform="esp32:esp32@3.3.11"
+time="2026-08-20T09:38:26-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/esp32/tools"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/esp32/tools"
+2026-08-20T12:38:26.265Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp-rv32@2601"
+2026-08-20T12:38:26.273Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp-x32@2601"
+2026-08-20T12:38:26.324Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32-libs@3.3.11"
+2026-08-20T12:38:26.342Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32c3-libs@3.3.11"
+2026-08-20T12:38:26.353Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32c5-libs@3.3.11"
+2026-08-20T12:38:26.366Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32c6-libs@3.3.11"
+2026-08-20T12:38:26.382Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32h2-libs@3.3.11"
+2026-08-20T12:38:26.405Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32p4-libs@3.3.11"
+2026-08-20T12:38:26.431Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32p4_es-libs@3.3.11"
+2026-08-20T12:38:26.463Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32s2-libs@3.3.11"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esp32s3-libs@3.3.11"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:esptool_py@5.3.1"
+2026-08-20T12:38:26.473Z root INFO creating connection for 1
+2026-08-20T12:38:26.477Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:mklittlefs@4.0.2-db0513a"
+2026-08-20T12:38:26.482Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:mkspiffs@0.2.3"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+2026-08-20T12:38:26.511Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-08-20T09:38:26-03:00" level=info msg="Loaded tool" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+2026-08-20T12:38:26.526Z daemon INFO time="2026-08-20T09:38:26-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/esp32/hardware/esp32/3.3.11/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:26-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/avr/1.8.8/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:26-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:26-03:00" level=info msg="Loading libraries index file" index=/home/estebanradesca/.arduino15/library_index.json
+2026-08-20T12:38:27.549Z daemon INFO time="2026-08-20T09:38:27-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/libraries isSingleLibrary=false location=ide
+2026-08-20T12:38:27.550Z daemon INFO time="2026-08-20T09:38:27-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/Arduino/libraries isSingleLibrary=false location=user
+2026-08-20T12:38:28.060Z root WARN Frontend a.configure took longer than the expected maximum 100 milliseconds: 131.4 ms [Finished 4.272 s after frontend start]
+2026-08-20T12:38:28.177Z root WARN A command editor.action.toggleStickyScroll is already registered.
+Opening channel for service path '/services/electron-window'.
+Opening channel for service path '/services/ide-updater'.
+2026-08-20T12:38:28.242Z root WARN Frontend keybindings.onStart took longer than the expected maximum 100 milliseconds: 130.0 ms [Finished 4.438 s after frontend start]
+2026-08-20T12:38:28.451Z root INFO Start frontend contributions: 481.1 ms [Finished 4.522 s after frontend start]
+2026-08-20T12:38:28.453Z root INFO Changed application state from 'init' to 'started_contributions'.
+2026-08-20T12:38:28.488Z root INFO Changed application state from 'started_contributions' to 'attached_shell'.
+2026-08-20T12:38:28.490Z root INFO >>> Restoring the layout state...
+2026-08-20T12:38:28.845Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Waiting for backend deployment: 246.7 ms [Finished 4.760 s after frontend start]
+2026-08-20T12:38:29.633Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212) starting instance
+[Object: null prototype] {}
+2026-08-20T12:38:29.638Z discovery-log INFO start resolved watching
+2026-08-20T12:38:29.646Z sketches-service WARN Warning! The request sketch path was different than the response sketch path from the CLI. This could be a potential bug. Request: </home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias/tuberias.ino>, response: </home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias>.
+2026-08-20T12:38:30.666Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Sync of 23 plugins: 2119.3 ms [Finished 6.879 s after frontend start]
+2026-08-20T12:38:30.742Z root INFO ------- SERIALIZED LAYOUT DATA -------
+2026-08-20T12:38:30.742Z root INFO {"version":5,"mainPanel":{"main":{"type":"tab-area","widgets":[{"constructionOptions":{"factoryId":"code-editor-opener","options":{"counter":0,"kind":"navigatable","uri":"file:///home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias/tuberias.ino"}},"innerWidgetState":"{\"cursorState\":[{\"inSelectionMode\":false,\"selectionStart\":{\"lineNumber\":214,\"column\":19},\"position\":{\"lineNumber\":214,\"column\":19}}],\"viewState\":{\"scrollLeft\":0,\"firstPosition\":{\"lineNumber\":206,\"column\":1},\"firstPositionDeltaTop\":-7},\"contributionsState\":{\"editor.contrib.folding\":{\"lineCount\":563,\"provider\":\"indent\",\"foldedImports\":false},\"editor.contrib.wordHighlighter\":false}}"}],"currentIndex":0}},"mainPanelPinned":[false],"bottomPanel":{"config":{"main":{"type":"tab-area","widgets":[{"constructionOptions":{"factoryId":"outputView"},"innerWidgetState":"{\"locked\":false}"},{"constructionOptions":{"factoryId":"serial-monitor"}}],"currentIndex":1}},"pinned":[false,false],"size":208,"expanded":true},"leftPanel":{"type":"sidepanel","items":[{"widget":{"constructionOptions":{"factoryId":"arduino-sketchbook-widget"}},"rank":1,"expanded":false,"pinned":false},{"widget":{"constructionOptions":{"factoryId":"boards-list-widget"}},"rank":2,"expanded":false,"pinned":false},{"widget":{"constructionOptions":{"factoryId":"library-list-widget"}},"rank":3,"expanded":false,"pinned":false},{"widget":{"constructionOptions":{"factoryId":"debug"},"innerWidgetState":"{\"parts\":[{\"partId\":\"debug:threads:-1\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"debug:threads\"},\"innerWidgetState\":\"{}\"}},{\"partId\":\"debug:frames:-1\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"debug:frames\"},\"innerWidgetState\":\"{}\"}},{\"partId\":\"debug:variables:-1\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"debug:variables\"},\"innerWidgetState\":\"{}\"}},{\"partId\":\"debug:watch:-1\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"debug:watch\"},\"innerWidgetState\":\"{}\"}},{\"partId\":\"debug:breakpoints:-1\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"debug:breakpoints\"},\"innerWidgetState\":\"{}\"}},{\"partId\":\"plugin-view:cortex-debug.peripherals\",\"collapsed\":true,\"hidden\":true,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"plugin-view\",\"options\":{\"id\":\"plugin-view:cortex-debug.peripherals\",\"viewId\":\"cortex-debug.peripherals\"}},\"innerWidgetState\":\"{\\\"label\\\":\\\"Cortex Peripherals\\\",\\\"widgets\\\":[],\\\"suppressUpdateViewVisibility\\\":false,\\\"currentViewContainerId\\\":\\\"debug\\\"}\"}},{\"partId\":\"plugin-view:cortex-debug.registers\",\"collapsed\":true,\"hidden\":true,\"originalContainerId\":\"debug:view-container:-1\",\"originalContainerTitle\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"plugin-view\",\"options\":{\"id\":\"plugin-view:cortex-debug.registers\",\"viewId\":\"cortex-debug.registers\"}},\"innerWidgetState\":\"{\\\"label\\\":\\\"Cortex Registers\\\",\\\"widgets\\\":[],\\\"suppressUpdateViewVisibility\\\":false,\\\"currentViewContainerId\\\":\\\"debug\\\"}\"}}],\"title\":{\"label\":\"debug\",\"iconClass\":\"codicon codicon-debug-alt\",\"closeable\":true}}"},"rank":4,"expanded":false,"pinned":false},{"widget":{"constructionOptions":{"factoryId":"search-view-container"},"innerWidgetState":"{\"parts\":[{\"partId\":\"search-in-workspace\",\"collapsed\":false,\"hidden\":false,\"originalContainerId\":\"search-view-container\",\"originalContainerTitle\":{\"label\":\"Buscar\",\"iconClass\":\"codicon codicon-search\",\"closeable\":true},\"widget\":{\"constructionOptions\":{\"factoryId\":\"search-in-workspace\"},\"innerWidgetState\":\"{\\\"matchCaseState\\\":{\\\"className\\\":\\\"codicon codicon-case-sensitive\\\",\\\"enabled\\\":false,\\\"title\\\":\\\"Coincidir mayúsculas y minúsculas\\\"},\\\"wholeWordState\\\":{\\\"className\\\":\\\"codicon codicon-whole-word\\\",\\\"enabled\\\":false,\\\"title\\\":\\\"Solo palabras completas\\\"},\\\"regExpState\\\":{\\\"className\\\":\\\"codicon codicon-regex\\\",\\\"enabled\\\":false,\\\"title\\\":\\\"Usar expresión regular\\\"},\\\"includeIgnoredState\\\":{\\\"className\\\":\\\"codicon codicon-eye\\\",\\\"enabled\\\":false,\\\"title\\\":\\\"Incluir archivos ignorados\\\"},\\\"showSearchDetails\\\":false,\\\"searchInWorkspaceOptions\\\":{\\\"matchCase\\\":false,\\\"matchWholeWord\\\":false,\\\"useRegExp\\\":false,\\\"multiline\\\":false,\\\"includeIgnored\\\":false,\\\"include\\\":[],\\\"exclude\\\":[],\\\"maxResults\\\":2000},\\\"searchTerm\\\":\\\"\\\",\\\"replaceTerm\\\":\\\"\\\",\\\"showReplaceField\\\":false,\\\"searchHistoryState\\\":{\\\"history\\\":[],\\\"index\\\":0},\\\"replaceHistoryState\\\":{\\\"history\\\":[],\\\"index\\\":0},\\\"includeHistoryState\\\":{\\\"history\\\":[],\\\"index\\\":0},\\\"excludeHistoryState\\\":{\\\"history\\\":[],\\\"index\\\":0}}\"}}],\"title\":{\"label\":\"Buscar\",\"iconClass\":\"fa fa-arduino-search\",\"closeable\":true}}"},"rank":5,"expanded":false,"pinned":false}]},"rightPanel":{"type":"sidepanel","items":[]},"activeWidgetId":"serial-monitor"}
+2026-08-20T12:38:30.742Z root INFO ------- END SERIALIZED LAYOUT DATA -------
+2026-08-20T12:38:31.188Z root INFO <<< The layout has been successfully restored.
+2026-08-20T12:38:31.313Z root INFO Initialize the workbench layout: 2701.1 ms [Finished 7.401 s after frontend start]
+2026-08-20T12:38:31.314Z root INFO Changed application state from 'attached_shell' to 'initialized_layout'.
+2026-08-20T12:38:31.316Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Loading plugin contributions
+2026-08-20T12:38:31.316Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Load contributions of 23 plugins: 118.8 ms [Finished 7.523 s after frontend start]
+2026-08-20T12:38:31.424Z root WARN 'cpp' language is remapped from 'source.cpp.embedded.macro' to 'source.cpp' scope
+2026-08-20T12:38:31.424Z root WARN a registered grammar configuration for 'cpp' language is overridden
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.linux as cortex-debug.armToolchainPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.osx as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.armToolchainPath.windows as cortex-debug.armToolchainPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.linux as cortex-debug.JLinkGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.osx as cortex-debug.JLinkGDBServerPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.JLinkGDBServerPath.windows as cortex-debug.JLinkGDBServerPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.linux as cortex-debug.openocdPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.osx as cortex-debug.openocdPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.openocdPath.windows as cortex-debug.openocdPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.linux as cortex-debug.pyocdPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.osx as cortex-debug.pyocdPath is null
+Conflict in settings file Default: Ignoring cortex-debug.pyocdPath.windows as cortex-debug.pyocdPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.linux as cortex-debug.PEGDBServerPath is null
+Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.osx as cortex-debug.PEGDBServerPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.PEGDBServerPath.windows as cortex-debug.PEGDBServerPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.stutilPath.linux as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stutilPath.osx as cortex-debug.stutilPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.stutilPath.windows as cortex-debug.stutilPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.linux as cortex-debug.stlinkPath is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.osx as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stlinkPath.windows as cortex-debug.stlinkPath is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.linux as cortex-debug.stm32cubeprogrammer is null
+2026-08-20T12:38:31.891Z root ERROR [hosted-plugin: 8212] Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.osx as cortex-debug.stm32cubeprogrammer is null
+Conflict in settings file Default: Ignoring cortex-debug.stm32cubeprogrammer.windows as cortex-debug.stm32cubeprogrammer is null
+2026-08-20T12:38:31.995Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): PluginManagerExtImpl/init()
+2026-08-20T12:38:32.002Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-arduino-api@0.1.2 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.175Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(json-language-features@1.88.1 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.181Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(cortex-debug@1.5.1 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.183Z root INFO [hosted-plugin: 8212] Debugger contribution has been registered: cortex-debug
+2026-08-20T12:38:32.188Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-arduino-tools@0.1.3 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.192Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(cpp@1.88.1 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.198Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(json@1.88.1 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.201Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-bg@1.48.3 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.203Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-cs@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.205Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-de@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.207Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-es@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.208Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-fr@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.208Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-hu@1.48.3 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.209Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-it@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.210Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-ja@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.211Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-ko@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.218Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-nl@1.48.3 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.220Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-pl@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.230Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-pt-BR@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.237Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-ru@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.238Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-tr@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.238Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-uk@1.48.3 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.239Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-zh-hans@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.240Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): initializing(vscode-language-pack-zh-hant@1.96.0 with /tmp/.mount_arduinjVKWGn/resources/app/lib/backend/plugin-vscode-init)
+2026-08-20T12:38:32.427Z root INFO Frontend application start: 4403.6 ms [Finished 9.595 s after backend start]
+Checking for update
+2026-08-20T12:38:32.529Z root INFO Replace loading indicator with ready workbench UI (animation): 852.8 ms [Finished 8.382 s after frontend start]
+2026-08-20T12:38:32.532Z root INFO Changed application state from 'initialized_layout' to 'ready'.
+2026-08-20T12:38:32.532Z root WARN Linked preference "workbench.colorCustomizations" not found.
+2026-08-20T12:38:32.555Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): PluginManagerExtImpl/loadPlugin(/tmp/.mount_arduinjVKWGn/resources/app/plugins/vscode-builtin-json-language-features/extension/client/dist/node/jsonClientMain)
+2026-08-20T12:38:32.729Z daemon INFO time="2026-08-20T09:38:32-03:00" level=info msg="Updating index" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+time="2026-08-20T09:38:32-03:00" level=info msg="Starting download" url="https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+2026-08-20T12:38:32.754Z daemon INFO time="2026-08-20T09:38:32-03:00" level=info msg="Starting download" url="https://downloads.arduino.cc/packages/package_index.tar.bz2"
+2026-08-20T12:38:32.811Z root INFO core-client-provider [library-index] Descargando el índice: library_index.tar.bz2
+
+2026-08-20T12:38:32.813Z root INFO core-client-provider [platform-index] Descargando el índice: package_index.tar.bz2
+
+2026-08-20T12:38:33.224Z daemon INFO time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:arm-none-eabi-gcc@7-2017q4"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:bossac@1.9.1-arduino5"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:dfu-util@0.11.0-arduino5"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:openocd@0.11.0-arduino2"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:mklittlefs@4.0.2-db0513a"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="builtin:serial-discovery@1.5.2"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="builtin:serial-monitor@0.15.0"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32p4_es-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esptool_py@5.3.1"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32c6-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:avrdude@8.0.0-arduino1"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32p4-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp-x32@2601"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32s2-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp-rv32@2601"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:arduinoOTA@1.3.0"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32c5-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32c3-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:mkspiffs@0.2.3"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="arduino:avr-gcc@7.3.0-atmel3.6.1-arduino7"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="builtin:dfu-discovery@0.1.2"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32h2-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="esp32:esp32s3-libs@3.3.11"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="builtin:mdns-discovery@1.1.0"
+time="2026-08-20T09:38:32-03:00" level=info msg="Tool required for debug" tool="builtin:ctags@5.8-arduino11"
+2026-08-20T12:38:33.230Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): PluginManagerExtImpl/loadPlugin(/tmp/.mount_arduinjVKWGn/resources/app/plugins/vscode-arduino-tools/extension/dist/extension.js)
+2026-08-20T12:38:33.507Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): PluginManagerExtImpl/loadPlugin(/tmp/.mount_arduinjVKWGn/resources/app/plugins/vscode-arduino-api/extension/dist/extension.js)
+2026-08-20T12:38:33.953Z root ERROR ---- !!!SLOW!!! DURATION: search took 1420.916 ms. Args: [{"type":"Updatable"}] ----
+2026-08-20T12:38:33.969Z root INFO [hosted-plugin: 8212] calling activation function on VS Code Arduino Tools
+2026-08-20T12:38:33.969Z root INFO [hosted-plugin: 8212] calling activation function on Arduino IDE API for VS Code extensions
+2026-08-20T12:38:33.978Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Starting plugins.
+Update for version 2.3.10 is not available (latest version: 2.3.10, downgrade is allowed).
+2026-08-20T12:38:34.037Z root INFO [hosted-plugin: 8212] PLUGIN_HOST(8212): PluginManagerExtImpl/loadPlugin(/tmp/.mount_arduinjVKWGn/resources/app/plugins/cortex-debug/extension/dist/extension.js)
+2026-08-20T12:38:34.132Z root INFO [hosted-plugin: 8212] Debug configuration provider has been registered: cortex-debug, trigger: 1
+2026-08-20T12:38:34.132Z root INFO [hosted-plugin: 8212] calling activation function on Cortex-Debug
+2026-08-20T12:38:34.135Z root INFO [hosted-plugin: 8212] GDB server console created
+2026-08-20T12:38:34.146Z root INFO [5dc07adf-4413-4108-ae30-f90035bd72d6] Start of 23 plugins: 2826.7 ms [Finished 10.357 s after frontend start]
+2026-08-20T12:38:34.169Z root INFO Starting language server: arduino:renesas_uno:unor4wifi
+2026-08-20T12:38:34.416Z daemon INFO time="2026-08-20T09:38:34-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/libraries isSingleLibrary=false location=ide
+time="2026-08-20T09:38:34-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/libraries isSingleLibrary=false location=platform
+2026-08-20T12:38:34.416Z daemon INFO time="2026-08-20T09:38:34-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/Arduino/libraries isSingleLibrary=false location=user
+2026-08-20T12:38:34.730Z root INFO [hosted-plugin: 8212] calling activation function on JSON Language Features (built-in)
+2026-08-20T12:38:35.784Z daemon INFO time="2026-08-20T09:38:35-03:00" level=info msg="Updating index" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-08-20T12:38:35.785Z daemon INFO time="2026-08-20T09:38:35-03:00" level=info msg="Starting download" url="https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+2026-08-20T12:38:35.786Z root INFO core-client-provider [platform-index] Descargando el índice: package_esp32_index.json
+
+2026-08-20T12:38:37.959Z daemon INFO time="2026-08-20T09:38:37-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/libraries isSingleLibrary=false location=ide
+time="2026-08-20T09:38:37-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:37-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/Arduino/libraries isSingleLibrary=false location=user
+2026-08-20T12:38:41.885Z daemon INFO time="2026-08-20T09:38:41-03:00" level=info msg="Checking signature" index=/home/estebanradesca/.arduino15/package_index.json signatureFile=/home/estebanradesca/.arduino15/package_index.json.sig trusted=true
+2026-08-20T12:38:42.006Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/package_esp32_index.json
+2026-08-20T12:38:42.007Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loading hardware from: /home/estebanradesca/.arduino15/packages"
+2026-08-20T12:38:42.007Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loading package arduino from: /home/estebanradesca/.arduino15/packages/arduino/hardware"
+2026-08-20T12:38:42.069Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/arduino/hardware/avr/1.8.8/installed.json
+2026-08-20T12:38:42.118Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded platform" platform="arduino:avr@1.8.8"
+2026-08-20T12:38:42.157Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/installed.json
+2026-08-20T12:38:42.209Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded platform" platform="arduino:renesas_uno@1.6.0"
+time="2026-08-20T09:38:42-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/arduino/tools"
+2026-08-20T12:38:42.209Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/arduino/tools"
+2026-08-20T12:38:42.229Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:arduinoOTA@1.3.0"
+2026-08-20T12:38:42.276Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:arm-none-eabi-gcc@7-2017q4"
+2026-08-20T12:38:42.286Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:avr-gcc@7.3.0-atmel3.6.1-arduino7"
+2026-08-20T12:38:42.287Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:avrdude@8.0.0-arduino1"
+2026-08-20T12:38:42.287Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:bossac@1.9.1-arduino5"
+2026-08-20T12:38:42.309Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:dfu-util@0.11.0-arduino5"
+2026-08-20T12:38:42.318Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="arduino:openocd@0.11.0-arduino2"
+2026-08-20T12:38:42.318Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loading package builtin from: /home/estebanradesca/.arduino15/packages/builtin"
+2026-08-20T12:38:42.325Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/builtin/tools"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/builtin/tools"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:ctags@5.8-arduino11"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:dfu-discovery@0.1.2"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.0.12"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.0.9"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:mdns-discovery@1.1.0"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.4.1"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.4.3"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:serial-discovery@1.5.2"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="builtin:serial-monitor@0.15.0"
+2026-08-20T12:38:42.348Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loading package esp32 from: /home/estebanradesca/.arduino15/packages/esp32/hardware"
+2026-08-20T12:38:42.392Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Missing signature file" index=/home/estebanradesca/.arduino15/packages/esp32/hardware/esp32/3.3.11/installed.json
+2026-08-20T12:38:42.623Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Adding monitor tool" protocol=serial tool="builtin:serial-monitor"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loaded platform" platform="esp32:esp32@3.3.11"
+2026-08-20T12:38:42.623Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Checking existence of 'tools' path: /home/estebanradesca/.arduino15/packages/esp32/tools"
+time="2026-08-20T09:38:42-03:00" level=info msg="Loading tools from dir: /home/estebanradesca/.arduino15/packages/esp32/tools"
+2026-08-20T12:38:42.653Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp-rv32@2601"
+2026-08-20T12:38:42.663Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp-x32@2601"
+2026-08-20T12:38:42.672Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32-libs@3.3.11"
+2026-08-20T12:38:42.686Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32c3-libs@3.3.11"
+2026-08-20T12:38:42.697Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32c5-libs@3.3.11"
+2026-08-20T12:38:42.704Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32c6-libs@3.3.11"
+2026-08-20T12:38:42.716Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32h2-libs@3.3.11"
+2026-08-20T12:38:42.720Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32p4-libs@3.3.11"
+2026-08-20T12:38:42.732Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32p4_es-libs@3.3.11"
+2026-08-20T12:38:42.744Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32s2-libs@3.3.11"
+2026-08-20T12:38:42.745Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esp32s3-libs@3.3.11"
+2026-08-20T12:38:42.745Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:esptool_py@5.3.1"
+2026-08-20T12:38:42.746Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:mklittlefs@4.0.2-db0513a"
+2026-08-20T12:38:42.746Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:mkspiffs@0.2.3"
+2026-08-20T12:38:42.746Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:openocd-esp32@v0.12.0-esp32-20260424"
+2026-08-20T12:38:42.758Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:riscv32-esp-elf-gdb@17.1_20260402"
+2026-08-20T12:38:42.760Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Loaded tool" tool="esp32:xtensa-esp-elf-gdb@17.1_20260402"
+2026-08-20T12:38:42.767Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Discovery event channel closed builtin:serial-discovery. Exiting goroutine."
+2026-08-20T12:38:42.767Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Closed and removed discovery builtin:serial-discovery"
+2026-08-20T12:38:42.767Z daemon INFO time="2026-08-20T09:38:42-03:00" level=error msg="Stopped decode loop: EOF" discovery="builtin:serial-discovery"
+2026-08-20T12:38:42.767Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Discovery event channel closed builtin:mdns-discovery. Exiting goroutine."
+2026-08-20T12:38:42.768Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Closed and removed discovery builtin:mdns-discovery"
+2026-08-20T12:38:42.768Z daemon INFO time="2026-08-20T09:38:42-03:00" level=error msg="Stopped decode loop: EOF" discovery="builtin:mdns-discovery"
+2026-08-20T12:38:42.769Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Discovery event channel closed builtin:dfu-discovery. Exiting goroutine."
+2026-08-20T12:38:42.772Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Closed and removed discovery builtin:dfu-discovery"
+2026-08-20T12:38:42.772Z daemon INFO time="2026-08-20T09:38:42-03:00" level=error msg="Stopped decode loop: EOF" discovery="builtin:dfu-discovery"
+2026-08-20T12:38:42.800Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/avr/1.8.8/libraries isSingleLibrary=false location=platform
+2026-08-20T12:38:42.800Z daemon INFO time="2026-08-20T09:38:42-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/arduino/hardware/renesas_uno/1.6.0/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:42-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/packages/esp32/hardware/esp32/3.3.11/libraries isSingleLibrary=false location=platform
+time="2026-08-20T09:38:42-03:00" level=info msg="Loading libraries index file" index=/home/estebanradesca/.arduino15/library_index.json
+2026-08-20T12:38:43.082Z daemon INFO time="2026-08-20T09:38:43-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/.arduino15/libraries isSingleLibrary=false location=ide
+time="2026-08-20T09:38:43-03:00" level=info msg="Adding libraries dir" dir=/home/estebanradesca/Arduino/libraries isSingleLibrary=false location=user
+[8108:0820/093843.434183:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 1 times!
+[8108:0820/093843.436266:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 2 times!
+isTempSketch: false. Input was /home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias
+Marking workspace as a closed sketch. Workspace URI: file:///home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias. Date: 1787229534162.
+isTempSketch: false. Input was /home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias
+Marking workspace as a closed sketch. Workspace URI: file:///home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias. Date: 1787229534184.
+2026-08-20T12:38:54.192Z root INFO socked closed
+2026-08-20T12:38:54.192Z root INFO closing connection for 1
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/localization-server'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/os'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/commands'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/keyboard'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/logger'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/messageService'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/ChannelCloseService'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/remote-filesystem'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/envs'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/authentication-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/sketches-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/config-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/workspace'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/notification-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/arduino-daemon'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/stopwatch'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/application'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/i18n'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/quickInput'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/debug'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/shell-terminal'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/quickPick'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/task'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/search'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/hostedPlugin'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/plugin-ext'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/plugin-paths'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/cli-preferences'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/boards-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/response-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/file-system-ext'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/core-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/example-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/library-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/executable-service'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/arduino-firmware-uploader'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/formatter'.
+2026-08-20T12:38:54.192Z root INFO Closing channel on service path '/services/search-in-workspace'.
+2026-08-20T12:38:54.193Z root INFO Closing channel on service path '/services/request-service'.
+2026-08-20T12:38:54.193Z root INFO Closing channel on service path '/services/keyStore'.
+2026-08-20T12:38:54.193Z root INFO Closing channel on service path '/services/languagePackService'.
+Closing channel on service path '/services/electron-window'.
+Closing channel on service path '/services/ide-updater'.
+Storing the sketch as a workspace root: </home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias>.
+Skipped storing sketch as workspace root. Already visited: </home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias>.
+Stored workspaces roots: /home/estebanradesca/Trabajo/Remo/proyecto/arduino/tuberias
+No sketches were scheduled for deletion.

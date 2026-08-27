@@ -1,6 +1,7 @@
 import '../style.css'
 import './reynolds.css'
 
+const CAMARA_URL_1 = import.meta.env.VITE_CAMARA_URL_1
 
 
 // Cotrol general
@@ -23,17 +24,19 @@ const disPasosTinta = document.getElementById('bot-dis-pasos-tinta');
 const aumPasosAgua = document.getElementById('bot-aum-pasos-agua');
 const disPasosAgua = document.getElementById('bot-dis-pasos-agua');
 
+const tinta = [pasosTinta, disPasosTinta, aumPasosTinta]
+const agua = [pasosAgua, disPasosAgua, aumPasosAgua]
 const rele = document.getElementById('bot-rele');
 
 
 import { conectarWebsocket, agregarTextoTerminal, obtenerHora, ws, 
-    contenedorTerminal, conectarCamara } from '../main.js';
+    contenedorTerminal, conectarCamara, bloquear, desbloquear} from '../main.js';
 
 
 
 window.addEventListener('DOMContentLoaded', () => {
-    conectarCamara();
-    conectarWebsocket(1);
+    conectarCamara(CAMARA_URL_1, video);
+    conectarWebsocket(0);
     agregarEscuchaWs();
 });
      
@@ -42,7 +45,7 @@ pasosAgua.addEventListener('change', (evento) => {
     const nuevo_valor = evento.target.value;
     console.log(evento.constructor.name);
     const mensaje = {
-        id_equipo: 1,
+        id_equipo: 0,
         pasos_agua: Number(nuevo_valor)
     };
     console.log(mensaje);
@@ -54,12 +57,55 @@ pasosTinta.addEventListener('change', (evento) => {
     const nuevo_valor = evento.target.value;
 
     const mensaje = {
-        id_equipo: 1,
+        id_equipo: 0,
         pasos_tinta: Number(nuevo_valor)
     };
     console.log(mensaje);
+    tinta.forEach((elemento) => {
+        bloquear(elemento);
+    });
     ws.send(JSON.stringify(mensaje));
 });
+
+
+disPasosTinta.addEventListener('click', (evento) => {
+    if (Number(pasosTinta.value) == 0) {
+        return;
+    }
+    pasosTinta.value = Number(pasosTinta.value) - 1;
+    const mensaje = {
+        id_equipo: 0,
+        pasos_tinta: Number(pasosTinta.value)
+    };
+    console.log(mensaje);
+    tinta.forEach((elemento) => {
+        bloquear(elemento);
+    });
+    ws.send(JSON.stringify(mensaje));
+});
+
+
+aumPasosTinta.addEventListener('click', (evento) => {
+    if (Number(pasosTinta.value) == 50) {
+        return;
+    }
+    pasosTinta.value = Number(pasosTinta.value) + 1;
+    const mensaje = {
+        id_equipo: 0,
+        pasos_tinta: Number(pasosTinta.value)
+    };
+    console.log(mensaje);
+    tinta.forEach((elemento) => {
+        bloquear(elemento);
+    });
+    ws.send(JSON.stringify(mensaje));
+    
+});
+
+
+
+
+
 
 aumPasosAgua.addEventListener('click', (evento) => {
     if (Number(pasosAgua.value) == 600) {
@@ -67,7 +113,7 @@ aumPasosAgua.addEventListener('click', (evento) => {
     }
     pasosAgua.value = Number(pasosAgua.value) + 1;
     const mensaje = {
-        id_equipo: 1,
+        id_equipo: 0,
         pasos_agua: Number(pasosAgua.value)
     };
     console.log(mensaje);
@@ -80,38 +126,14 @@ disPasosAgua.addEventListener('click', (evento) => {
     }
     pasosAgua.value = Number(pasosAgua.value) - 1;
     const mensaje = {
-        id_equipo: 1,
+        id_equipo: 0,
         pasos_agua: Number(pasosAgua.value)
     };
     console.log(mensaje);
     ws.send(JSON.stringify(mensaje));
 });
 
-aumPasosTinta.addEventListener('click', (evento) => {
-    if (Number(pasosTinta.value) == 50) {
-        return;
-    }
-    pasosTinta.value = Number(pasosTinta.value) + 1;
-    const mensaje = {
-        id_equipo: 1,
-        pasos_tinta: Number(pasosTinta.value)
-    };
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
-});
 
-disPasosTinta.addEventListener('click', (evento) => {
-    if (Number(pasosTinta.value) == 0) {
-        return;
-    }
-    pasosTinta.value = Number(pasosTinta.value) - 1;
-    const mensaje = {
-        id_equipo: 1,
-        pasos_tinta: Number(pasosTinta.value)
-    };
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
-});
 
 
 rele.addEventListener('click', (evento) => {  
@@ -121,7 +143,7 @@ rele.addEventListener('click', (evento) => {
         rele.classList.remove('apagado');
         rele.classList.add('encendido')
         mensaje = {
-            id_equipo: 1,
+            id_equipo: 0,
             rele: 1
         };
     } else {
@@ -129,7 +151,7 @@ rele.addEventListener('click', (evento) => {
         rele.classList.remove('encendido');
         rele.classList.add('apagado');
         mensaje = {
-            id_equipo: 1,
+            id_equipo: 0,
             rele: 0
         };
     }
@@ -227,3 +249,4 @@ function agregarEscuchaWs() {
         }
     });
 }
+
