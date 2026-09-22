@@ -10,7 +10,7 @@ const overlayPurga =
     document.getElementById('overlay-purga');
 
 
-const TIEMPO_PURGA = 30000; // 30 segundos
+const TIEMPO_PURGA = 630000; // 30 segundos
 
 
 setTimeout(() => {
@@ -749,3 +749,208 @@ for (
             }
         );
 }
+
+
+/* ============================================================
+   CRONÓMETRO
+   ============================================================ */
+
+const valorCronometro =
+    document.querySelector(
+        '#cont-valor span'
+    );
+
+
+const botonIniciarCronometro =
+    document.getElementById(
+        'iniciar-cronometro'
+    );
+
+
+const botonPararCronometro =
+    document.getElementById(
+        'parar-cronometro'
+    );
+
+
+const botonRestablecerCronometro =
+    document.getElementById(
+        'restablecer-cronometro'
+    );
+
+
+/* ------------------------------------------------------------
+   ESTADO
+   ------------------------------------------------------------ */
+
+let cronometroActivo = false;
+
+let tiempoInicio = 0;
+
+let tiempoAcumulado = 0;
+
+let intervaloCronometro = null;
+
+
+/* ------------------------------------------------------------
+   FORMATEAR TIEMPO
+   ------------------------------------------------------------ */
+
+function formatearTiempo(tiempo) {
+
+    const minutos =
+        Math.floor(tiempo / 60000);
+
+    const segundos =
+        Math.floor(
+            (tiempo % 60000) / 1000
+        );
+
+    const centesimas =
+        Math.floor(
+            (tiempo % 1000) / 10
+        );
+
+
+    return (
+        minutos.toString().padStart(2, '0') +
+        ':' +
+        segundos.toString().padStart(2, '0') +
+        ':' +
+        centesimas.toString().padStart(2, '0')
+    );
+}
+
+
+/* ------------------------------------------------------------
+   ACTUALIZAR
+   ------------------------------------------------------------ */
+
+function actualizarCronometro() {
+
+    let tiempoActual =
+        tiempoAcumulado;
+
+
+    if (cronometroActivo) {
+
+        tiempoActual +=
+            performance.now() -
+            tiempoInicio;
+    }
+
+
+    valorCronometro.textContent =
+        formatearTiempo(tiempoActual);
+}
+
+
+/* ------------------------------------------------------------
+   INICIAR
+   ------------------------------------------------------------ */
+
+botonIniciarCronometro.addEventListener(
+    'click',
+    () => {
+
+        if (cronometroActivo) {
+            return;
+        }
+
+
+        cronometroActivo = true;
+
+
+        tiempoInicio =
+            performance.now();
+
+
+        intervaloCronometro =
+            setInterval(
+                actualizarCronometro,
+                10
+            );
+
+
+        /* Mostrar controles */
+
+        botonIniciarCronometro.hidden = true;
+
+        botonPararCronometro.hidden = false;
+
+        botonRestablecerCronometro.hidden = false;
+    }
+);
+
+
+/* ------------------------------------------------------------
+   PARAR
+   ------------------------------------------------------------ */
+
+botonPararCronometro.addEventListener(
+    'click',
+    () => {
+
+        if (!cronometroActivo) {
+            return;
+        }
+
+
+        tiempoAcumulado +=
+            performance.now() -
+            tiempoInicio;
+
+
+        cronometroActivo = false;
+
+
+        clearInterval(
+            intervaloCronometro
+        );
+
+
+        intervaloCronometro = null;
+
+
+        actualizarCronometro();
+    }
+);
+
+
+/* ------------------------------------------------------------
+   RESTABLECER
+   ------------------------------------------------------------ */
+
+botonRestablecerCronometro.addEventListener(
+    'click',
+    () => {
+
+        if (intervaloCronometro !== null) {
+
+            clearInterval(
+                intervaloCronometro
+            );
+
+            intervaloCronometro = null;
+        }
+
+
+        cronometroActivo = false;
+
+        tiempoInicio = 0;
+
+        tiempoAcumulado = 0;
+
+
+        actualizarCronometro();
+
+
+        /* Volver al estado inicial */
+
+        botonIniciarCronometro.hidden = false;
+
+        botonPararCronometro.hidden = true;
+
+        botonRestablecerCronometro.hidden = true;
+    }
+);
