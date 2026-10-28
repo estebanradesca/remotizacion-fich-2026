@@ -1,0 +1,154 @@
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Golpe de Ariete</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Encabezado -->
+        <header>
+            <h1 class="titulo">Golpe de Ariete</h1>
+        </header>
+
+        <main>
+            <div id="cont-general">
+
+                <div id="cont-observaciones">
+                    <h4>Esquema</h4>
+
+                    <div id="cont-panel">
+                        <!-- Panel de tuberías -->
+                        <svg
+                            version="1.1"
+                            id="esquema-tuberias"
+                            width="500"
+                            height="350"
+                            viewBox="0 0 200 250"
+                            inkscape:version="1.4.2 (ebf0e94, 2025-05-08)"
+                            sodipodi:docname="panel.svg"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:svg="http://www.w3.org/2000/svg">
+                        </svg>
+                    </div>
+
+                    <div id="cont-camaras-crono">
+
+                        <!-- Cámara de caudal -->
+                        <div id="cont-camara-caudal">
+                            <h4>Caudal</h4>
+
+                            <div class="cont-video">
+                                <video
+                                    id="video-caudal"
+                                    autoplay
+                                    playsinline
+                                    muted>
+                                </video>
+                            </div>
+                        </div>
+
+                        <!-- Gráfica de presión -->
+                        <div id="cont-grafica-presion">
+                            <h4 id="tit-grafica-presion">Gráfica en tiempo real</h4>
+
+                            <div id="cont-canvas-presion">
+                                <canvas id="canvas-presion"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Controles -->
+                <div id="cont-controles">
+                    <h4>Datos de control</h4>
+
+                    <div id="cont-manejo-controles">
+
+                        <!-- Regulador de caudal -->
+                        <div id="cont-reg-caudal">
+                            <span>Caudal</span>
+
+                            <div id="cont-regulador-caudal">
+                                <button id="bot-menos-caudal" type="button">-</button>
+
+                                <input
+                                    type="range"
+                                    id="slider-caudal"
+                                    min="0"
+                                    max="1300"
+                                    step="1"
+                                    value="0">
+
+                                <button id="bot-mas-caudal" type="button">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Bomba -->
+                        <div class="datos" id="cont-control-bomba">
+                            <span>Bomba</span>
+                            <button id="bot-bomba" class="apagado" type="button">
+                                Apagada
+                            </button>
+                        </div>
+
+                        <!-- Cierre rápido -->
+                        <div class="datos" id="cont-cierre-rapido">
+                            <span>Cierre Rápido</span>
+                            <button id="bot-cerrar-rapido" class="apagado" type="button">
+                                Cerrar
+                            </button>
+                        </div>
+
+                        <!-- Cierre lento -->
+                        <div class="datos" id="cont-cierre-lento">
+                            <span>Cierre Lento</span>
+
+                            <input
+                                type="number"
+                                id="input-velocidad-cierre"
+                                placeholder="Velocidad">
+
+                            <button id="bot-cerrar-lento" class="apagado" type="button">
+                                Cerrar
+                            </button>
+                        </div>
+
+                        <!-- Presión -->
+                        <div class="datos" id="cont-valor-presion">
+                            <span>Presión</span>
+                            <strong>
+                                <span id="valor-presion">Sin datos</span>
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <!-- Terminal -->
+                    <div id="cont-terminal">
+                        <div id="terminal-mensajes"></div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- Pie de página -->
+        <footer>
+            <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
+        </footer>
+
+        <!-- JavaScript -->
+        <script type="module" src="./golpe.js"></script>
+    </body>
+</html>

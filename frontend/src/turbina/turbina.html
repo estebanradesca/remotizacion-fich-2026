@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <!-- 
+        Agregar favicon después
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Turbina Pelton</title>
+
+        <!-- CSS -->
+        <!--No es necesario, Vite lo importa directamente
+
+        <link rel="stylesheet" href="src/style.css"/> 
+        
+        -->
+        <!-- Fuente Lato-->
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+   
+    </head>
+    <body>
+    <!-- Encabezado -->
+        <header>
+            <h1 class="titulo">Turbina Pelton</h1>
+        </header>
+
+        <main>             
+            <div id="cont-general">
+                <div id="cont-camara">
+                    <h4>Cámara</h4>
+                    <div id="cont-video-controles">
+                        <div class="cont-video">
+                            <video id="video-stream" autoplay playsinline muted></video>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div id="cont-controles">
+                    <h4>Datos de control</h4>
+                    <div id="cont-manejo-controles">
+                        <div class="datos" id="cont-control-bomba">
+                            <span>Bomba</span>
+                            <button id="bot-bomba" class="apagado" type="button">
+                                Apagada
+                            </button>
+                        </div>
+                    <div id="cont-reg-caudal">
+                            <span>Caudal</span>
+
+                            <div id="cont-regulador-caudal">
+                                <button id="bot-menos-caudal" type="button">-</button>
+
+                                <input
+                                    type="range"
+                                    id="slider-caudal"
+                                    min="0"
+                                    max="1250"
+                                    step="1"
+                                    value="0">
+
+                                <button id="bot-mas-caudal" type="button">+</button>
+                            </div>
+                        </div>
+                    <div id="cont-reg-caudal">
+                            <span>Aguja</span>
+
+                            <div id="cont-regulador-caudal">
+                                <button id="bot-menos-caudal" type="button">-</button>
+
+                                <input
+                                    type="range"
+                                    id="slider-caudal"
+                                    min="0"
+                                    max="1250"
+                                    step="1"
+                                    value="0">
+
+                                <button id="bot-mas-caudal" type="button">+</button>
+                            </div>
+                        </div>
+
+                    
+                    <div><span>Velocidad</span><strong><span id="valor-caudal">Sin datos</span> RPM</strong></div>
+                    <div><span>Presión</span><strong><span id="valor-temp">Sin datos</span> Pa</strong></div>
+
+                    </div>
+
+                    <div id="cont-terminal">
+                    </div>
+                </div>
+            </div>            
+            
+                    
+        </main>
+        
+        <!-- Pie de página -->
+        <footer>
+            <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
+        </footer>
+
+        <!-- JS -->
+        <script type="module" src="./turbina.js" defer></script>
+    </body>
+</html>

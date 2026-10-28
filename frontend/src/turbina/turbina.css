@@ -1,0 +1,118 @@
+/* Estructura general */
+
+#cont-general {
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
+
+/* Sección de la cámara */
+
+#cont-camara {
+    text-align: center; 
+}
+
+#cont-camara h4 {
+    margin: 0.5rem 0 0 0;
+}
+
+#cont-video-controles {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+}
+
+
+#video-stream { 
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+
+#cont-zoom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+#bot-dis-zoom {
+    margin: 0rem 0.25rem 0rem 0rem;
+    width: 100%;
+}
+
+#bot-aum-zoom {
+    margin: 0rem 0rem 0rem 0.25rem;
+    width: 100%;
+}
+
+
+#bot-captura {
+    width: 100%;
+}
+
+
+/* Sección de los controles y valores del experimento */
+
+#cont-controles {
+    text-align: center;
+    padding: 0;
+    margin: 0 1rem 0 1rem;
+}
+
+#cont-controles h4 {
+    margin: 0.5rem 0 0 0;
+}
+
+#cont-manejo-controles {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0 0 0;
+}
+
+#cont-manejo-controles > div {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    border-bottom: 1px solid #0061ae;
+    min-height: 4rem;
+}
+
+#deposito {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: smaller;
+    align-items: center;
+    padding: 0.2rem;
+}
+
+
+
+
+
+#cont-regulador-caudal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#cont-reg-caudal > span {
+    text-align: left;
+}
+
+#cont-regulador {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#slider-caudal {
+    width: 100%;
+    margin: 0.5rem;
+}

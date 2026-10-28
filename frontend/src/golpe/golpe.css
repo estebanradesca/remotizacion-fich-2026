@@ -1,0 +1,297 @@
+/* ============================================================
+   ESTRUCTURA GENERAL
+   ============================================================ */
+
+#cont-general {
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
+
+
+/* ============================================================
+   PANEL Y CÁMARAS
+   ============================================================ */
+
+#cont-observaciones {
+    text-align: center;
+}
+
+#cont-observaciones h4 {
+    margin: 0.5rem 0 0;
+}
+
+#cont-panel {
+    background-color: #f8f8f8;
+    border: 2px solid #333c4e;
+    padding: 0;
+    border-radius: 8px;
+    margin: 0.5rem 1rem;
+    overflow: hidden;
+}
+
+#cont-camaras-crono {
+    display: grid;
+    grid-template-columns: 0.8fr 1fr;
+    margin: 0 0.5rem;
+    align-items: stretch;
+}
+
+#cont-camara-caudal,
+#cont-camara-2,
+#cont-general-crono {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    margin: 0 0.5rem 0.5rem;
+}
+
+#cont-camara-1 > div,
+#cont-camara-2 > div,
+#cont-general-crono > div {
+    margin-top: 0.5rem;
+}
+
+video {
+    display: block;
+    width: 100%;
+}
+
+.cont-video {
+    width: 90%;
+    margin: 0.5rem auto 0;
+}
+
+
+/* ============================================================
+   CRONÓMETRO
+   ============================================================ */
+
+#cont-valor {
+    font-size: xx-large;
+    padding: 0 0 1.5rem;
+}
+
+#cont-crono-botones {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    aspect-ratio: 16 / 9;
+}
+
+#crono-botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+
+#cont-controles {
+    text-align: center;
+    padding: 0;
+    margin: 0 1rem;
+}
+
+#cont-controles h4 {
+    margin: 0.5rem 0 0;
+}
+
+#cont-manejo-controles {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0 0;
+}
+
+#cont-manejo-controles > div {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    border-bottom: 1px solid #0061ae;
+    min-height: 3.5rem;
+}
+
+
+/* ============================================================
+   REGULADOR DE CAUDAL
+   ============================================================ */
+
+#cont-regulador-caudal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#cont-reg-caudal > span {
+    text-align: left;
+}
+
+#cont-regulador {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#slider-caudal {
+    width: 100%;
+    margin: 0.5rem;
+}
+
+
+/* ============================================================
+   COLUMNAS
+   ============================================================ */
+
+.columna-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.columna-derecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.datos span {
+    white-space: nowrap;
+}
+
+.sub-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 9rem;
+}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+
+#cont-controles button {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        filter 0.2s ease;
+
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   CERRADO / APAGADO
+   ============================================================ */
+
+#cont-controles button.apagado {
+    background-color: rgb(240, 31, 31);
+    color: white;
+}
+
+
+/* ============================================================
+   ABIERTO / ENCENDIDO
+   ============================================================ */
+
+#cont-controles button.abierto {
+    background-color: rgb(27, 160, 38);
+    color: white;
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+#cont-controles button.apagado:hover,
+#cont-controles button.abierto:hover {
+    filter: brightness(0.9);
+}
+
+/* ============================================================
+   SVG
+   ============================================================ */
+
+path {
+    fill: rgb(174, 233, 159);
+
+    transition: fill 0.5s ease-in-out;
+}
+
+
+/* Bomba */
+
+#bomba {
+    fill: grey !important;
+}
+
+
+/* Agua */
+
+#cisterna path,
+#bomba,
+#tramo-bomba {
+    fill: rgb(114, 192, 223) !important;
+}
+
+
+/* Válvulas que se pueden tocar */
+
+#valvulas-activables path {
+    cursor: pointer;
+    fill: rgb(240, 31, 31);
+}
+
+
+/* Elementos no activables */
+
+#valvulas-no-activables path,
+#medidores path {
+    fill: rgb(174, 233, 159) !important;
+}
+
+
+/* Tramo activo */
+
+.activo path {
+    fill: rgb(114, 192, 223) !important;
+}
+
+
+/* Válvula abierta */
+
+.abierta path {
+    fill: rgb(27, 160, 38) !important;
+}
+
+
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+
+#cont-terminal {
+    width: 100%;
+}
+
+
+.datos input {
+    width: 110px;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0.4rem;
+    font-size: 0.85rem;
+}
+
+.datos span {
+    white-space: nowrap;
+}
