@@ -1,66 +1,88 @@
-from fastapi import FastAPI, WebSocket  
-from fastapi.middleware.cors import CORSMiddleware 
+
 from contextlib import asynccontextmanager
 import asyncio
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.infra.tcp_arduino import SocketArduino
-from app.api.ws.ws_control import recibo_mensaje_de_arduino, controlador_ws
+from app.api.ws.ws_control import (
+    recibo_mensaje_de_arduino,
+    controlador_ws,
+)
 from app.api.routers import websocket
 
 
-# Inicializo recursos que voy a necesitar durante todo el tiempo
-# que dure el servidor. Cuando el servidor finaliza se cierran
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Este código se ejecuta antes de iniciar el servidor
+    app.state.sockets = {}
+    app.state.tareas_sockets = {}
+    app.state.controlador = controlador_ws
+
+    # Cada entrada representa una conexión TCP independiente.
+    conexiones = [
+        (2, "valvulas"),    # Golpe de ariete: válvulas y sensores
+        (2, "motores"),     # Golpe de ariete: motores
+    ]
 
     try:
-        await iniciar_socket(app, id_equipo = 1)
-        
-        # Controlador del websocket para usarlo como dependencia
-        app.state.controlador = controlador_ws
+        for id_equipo, conexion in conexiones:
+            await iniciar_socket(app, id_equipo, conexion)
 
-    except Exception as error:
-        print("No se pudo iniciar")
-        app.state.controlador = None
+        yield
 
-    
-    yield
-    # Esta parte del código se ejecuta justo antes de cerrar el servidor    
-    
-    if app.state.controlador is not None:
-        # Cierro la conexión con el módulo NT1-B del Arduino 
-        await cerrar_socket(app)
-    
+    finally:
+        await cerrar_sockets(app)
 
 
-app = FastAPI(lifespan = lifespan)
-
-async def iniciar_socket(app, id_equipo: int):
-    # Inicio la conexión con el módulo NT1-B del Arduino    
-    app.state.arduino_socket = SocketArduino(id_equipo)
-    
-    
-    await asyncio.to_thread(app.state.arduino_socket.conectar)
-    
-    # Le paso a mi socket la función que utilizo para reenviar el mensaje
-    # que me llega desde el Arduino al websocket.
-    app.state.arduino_socket.funcion_callback(recibo_mensaje_de_arduino)
-    
-    # El socket se queda escuchando en segundo plano sin interrumpir
-    
-    app.state.escucha_task = asyncio.create_task(app.state.arduino_socket.recibir())
-    
-
-async def cerrar_socket(app):
-    await asyncio.to_thread(app.state.arduino_socket.cerrar)
-    app.state.escucha_task.cancel()
+app = FastAPI(lifespan=lifespan)
 
 
+async def iniciar_socket(
+    app: FastAPI,
+    id_equipo: int,
+    conexion: str | None = None,
+):
+    socket_arduino = SocketArduino(id_equipo, conexion)
+
+    # La clave distingue los dos sockets del equipo 2.
+    clave = (id_equipo, conexion)
+
+    await asyncio.to_thread(socket_arduino.conectar)
+
+    # El callback debe conocer qué conexión recibió el mensaje.
+    async def callback(mensaje, id_recibido):
+        await recibo_mensaje_de_arduino(
+            mensaje,
+            id_recibido,
+            conexion=conexion,
+        )
+
+    socket_arduino.funcion_callback(callback)
+
+    app.state.sockets[clave] = socket_arduino
+    app.state.tareas_sockets[clave] = asyncio.create_task(
+        socket_arduino.recibir()
+    )
 
 
-### Cambiar después para solo permitir acceso seguro
+async def cerrar_sockets(app: FastAPI):
+    sockets = getattr(app.state, "sockets", {})
+    tareas = getattr(app.state, "tareas_sockets", {})
+
+    # Primero se cierran los sockets para interrumpir recv().
+    for socket_arduino in sockets.values():
+        await asyncio.to_thread(socket_arduino.cerrar)
+
+    # Después se espera la finalización de las tareas.
+    for tarea in tareas.values():
+        if not tarea.done():
+            tarea.cancel()
+
+    if tareas:
+        await asyncio.gather(*tareas.values(), return_exceptions=True)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -69,11 +91,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#app.include_router(equipos.router)
 app.include_router(websocket.router)
+
 
 @app.get("/")
 async def root():
     return {"mensaje": "Hola"}
-
-

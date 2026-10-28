@@ -1,8 +1,10 @@
-from starlette.requests import HTTPConnection
-from app.infra.tcp_arduino import SocketArduino
 
-def obtener_socket(conexion: HTTPConnection):
-    return conexion.app.state.arduino_socket
+from starlette.requests import HTTPConnection
+
+
+def obtener_sockets(conexion: HTTPConnection):
+    return conexion.app.state.sockets
+
 
 def obtener_controlador(conexion: HTTPConnection):
     return conexion.app.state.controlador

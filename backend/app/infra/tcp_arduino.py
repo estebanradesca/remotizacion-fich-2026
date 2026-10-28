@@ -1,3 +1,4 @@
+
 import socket
 import os
 from dotenv import load_dotenv
@@ -5,79 +6,140 @@ import asyncio
 
 load_dotenv()
 
+
 class SocketArduino:
-    def __init__(self, id_equipo: int):
-        self.HOST_ARDUINO = os.getenv("HOST_ARDUINO")
-        self.PUERTO_ARDUINO = int(os.getenv("PUERTO_ARDUINO"))
-        self.socket_arduino = None
+    def __init__(self, id_equipo: int, conexion: str | None = None):
         self.id_equipo = id_equipo
-        self.buffer = b"" # Buffer de recepción
+        self.conexion = conexion
+
+        # Configuración habitual para los equipos existentes.
+        if conexion is None:
+            self.HOST_ARDUINO = os.getenv("HOST_ARDUINO")
+            puerto = os.getenv("PUERTO_ARDUINO")
+
+        # Configuración independiente para golpe de ariete.
+        elif id_equipo == 2 and conexion == "valvulas":
+            self.HOST_ARDUINO = os.getenv("HOST_GOLPE_VALVULAS")
+            puerto = os.getenv("PUERTO_GOLPE_VALVULAS")
+
+        elif id_equipo == 2 and conexion == "motores":
+            self.HOST_ARDUINO = os.getenv("HOST_GOLPE_MOTORES")
+            puerto = os.getenv("PUERTO_GOLPE_MOTORES")
+
+        else:
+            raise ValueError(
+                f"Configuración de conexión inválida: "
+                f"id_equipo={id_equipo}, conexion={conexion}"
+            )
+
+        if not self.HOST_ARDUINO or not puerto:
+            raise ValueError(
+                f"Falta configurar HOST o PUERTO para {conexion or id_equipo}"
+            )
+
+        self.PUERTO_ARDUINO = int(puerto)
+        self.socket_arduino = None
+        self.buffer = b""
         self.escuchando = False
-        self.callback = lambda x: asyncio.sleep(0)
+        self.callback = lambda x, y: asyncio.sleep(0)
         self.lock = asyncio.Lock()
 
-    # Conexión con el módulo del Arduino
     def conectar(self):
-        # Si el socket ya está conectado, no hago nada
         if self.socket_arduino is not None:
-            return  
+            return
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         try:
-            # Creo el socket
-            self.socket_arduino = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # Conecto con el socket del módulo del Arduino
-            self.socket_arduino.connect((self.HOST_ARDUINO, self.PUERTO_ARDUINO))
-            print(f"Conectado al módulo del Arduino con dirección: {self.HOST_ARDUINO}:{self.PUERTO_ARDUINO}")
+            sock.connect((self.HOST_ARDUINO, self.PUERTO_ARDUINO))
+            self.socket_arduino = sock
             self.escuchando = True
 
-        except Exception as error:
-            self.socket_arduino.close()
-            self.socket_arduino = None            
-            raise Exception(f"Error conectando al módulo del Arduino: {error}")
+            print(
+                f"Conectado al Arduino {self.conexion or self.id_equipo}: "
+                f"{self.HOST_ARDUINO}:{self.PUERTO_ARDUINO}"
+            )
 
-    # Cierre de la conexión con el módulo
+        except Exception as error:
+            sock.close()
+            raise ConnectionError(
+                f"Error conectando al Arduino "
+                f"{self.conexion or self.id_equipo}: {error}"
+            ) from error
+
     def cerrar(self):
+        self.escuchando = False
+
         if self.socket_arduino is not None:
+            try:
+                self.socket_arduino.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+
             self.socket_arduino.close()
             self.socket_arduino = None
-            self.escuchando = False
-            print("Conexión cerrada con el módulo del Arduino")
-    
-    # Envío datos desde el servidor al módulo Arduino a través del socket
+
+            print(
+                f"Conexión cerrada: {self.conexion or self.id_equipo}"
+            )
+
     async def enviar(self, datos: bytes):
         if self.socket_arduino is None:
-            raise Exception("Socket no conectado")
+            raise ConnectionError("Socket no conectado")
+
         try:
-            # Bloqueo el acceso al socket con el arduino mientras envío todos los datos
             async with self.lock:
-                await asyncio.to_thread(self.socket_arduino.sendall, datos)
-        except Exception as error:
-            raise Exception(f"Error enviando los datos: {error}")
-    
-    # Recibo todo lo que llega desde el módulo
+                await asyncio.to_thread(
+                    self.socket_arduino.sendall, datos
+                )
+                print(self.socket_arduino)
+                print("se envioo")
+                print(datos)
+        except OSError as error:
+            raise ConnectionError(
+                f"Error enviando datos al Arduino: {error}"
+            ) from error
+
+
     async def recibir(self):
         if self.socket_arduino is None:
-                raise Exception("Socket no conectado")
+            raise ConnectionError("Socket no conectado")
 
         while self.escuchando:
-            
-            datos = await asyncio.to_thread(self.socket_arduino.recv, 1024)
-            # Cuando se desconecta el módulo se recibe b"" a través de recv,
-            # por eso utilizo el if de esta forma
-            if not datos:  
-                print("Módulo del Arduino desconectado, no se están recibiendo datos desde el Arduino")
-                break 
+            try:
+                datos = await asyncio.to_thread(
+                    self.socket_arduino.recv, 1024
+                )
+            except OSError:
+                if self.escuchando:
+                    raise
+                break
+
+            if not datos:
+                print(
+                    f"Arduino desconectado: "
+                    f"{self.conexion or self.id_equipo}"
+                )
+                break
+
+            print(f"[{self.conexion}] Bytes recibidos: {datos!r}")
             self.buffer += datos
-            
+
             while b"\n" in self.buffer:
-                texto, self.buffer = self.buffer.split(b"\n", 1)
-                # El mensaje viene en bytes y lo mando para que se procese
-                # y se envíe por el websocket a través de la función callback 
-                
-                await self.callback(texto, self.id_equipo)
-    
-    # La funcion callback me va a servir para procesar el mensaje 
-    # y enviar por el websocket lo que viene desde el módulo del 
-    # Arduino
+                linea, self.buffer = self.buffer.split(b"\n", 1)
+                linea = linea.rstrip(b"\r")
+
+                if not linea:
+                    continue
+
+                print(f"[{self.conexion}] Mensaje completo: {linea!r}")
+
+                try:
+                    await self.callback(linea, self.id_equipo)
+                except Exception as error:
+                    print(f"Error en callback: {error!r}")
+
+        self.escuchando = False
 
     def funcion_callback(self, funcion):
         self.callback = funcion
