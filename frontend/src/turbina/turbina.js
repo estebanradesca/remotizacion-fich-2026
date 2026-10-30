@@ -1,252 +1,314 @@
-import '../style.css'
-import './turbina.css'
+import '../style.css';
+import './turbina.css';
 
-const CAMARA_URL_1 = import.meta.env.VITE_CAMARA_URL_1
+import {
+    conectarWebsocket,
+    ws,
+    conectarCamara
+} from '../main.js';
 
+const CAMARA_URL_1 = import.meta.env.VITE_CAMARA_URL_1;
 
-// Cotrol general
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+
+const ID_EQUIPO = 2;
+
+const CAUDAL_MIN = 0;
+const CAUDAL_MAX = 1300;
+
+const ANGULO_MIN = 0;
+const ANGULO_MAX = 11.5;
+
+// ============================================================
+// ELEMENTOS HTML
+// ============================================================
 
 const video = document.getElementById('video-stream');
 
-const caudal = document.getElementById('valor-caudal');
+const rpm = document.getElementById('valor-rpm');
+const presionP4 = document.getElementById('valor-presion-p4');
+const presionP20 = document.getElementById('valor-presion-p20');
 
-const temp = document.getElementById('valor-temp');
+const sliderCaudal = document.getElementById('slider-caudal');
+const sliderAguja = document.getElementById('slider-aguja');
 
+const bomba = document.getElementById('bot-bomba');
 
-const pasosAgua = document.getElementById('desl-pasos-agua');
-pasosAgua.value = '0';
+const botonMasCaudal = document.getElementById('bot-mas-caudal');
+const botonMenosCaudal = document.getElementById('bot-menos-caudal');
 
-const pasosTinta = document.getElementById('desl-pasos-tinta');
-pasosTinta.value = '0';
+const botonMasAguja = document.getElementById('bot-mas-aguja');
+const botonMenosAguja = document.getElementById('bot-menos-aguja');
 
-const aumPasosTinta = document.getElementById('bot-aum-pasos-tinta');
-const disPasosTinta = document.getElementById('bot-dis-pasos-tinta');
-const aumPasosAgua = document.getElementById('bot-aum-pasos-agua');
-const disPasosAgua = document.getElementById('bot-dis-pasos-agua');
+// ============================================================
+// ESTADO LOCAL
+// ============================================================
 
-const tinta = [pasosTinta, disPasosTinta, aumPasosTinta]
-const agua = [pasosAgua, disPasosAgua, aumPasosAgua]
-const rele = document.getElementById('bot-rele');
+let bombaEncendida = false;
 
+let posicionCaudal = 0;
+let anguloAguja = 0;
 
-import { conectarWebsocket, agregarTextoTerminal, obtenerHora, ws, 
-    contenedorTerminal, conectarCamara, bloquear, desbloquear} from '../main.js';
-
-
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
 
 window.addEventListener('DOMContentLoaded', () => {
+
     conectarCamara(CAMARA_URL_1, video);
-    conectarWebsocket(0);
+
+    conectarWebsocket(ID_EQUIPO);
+
     agregarEscuchaWs();
-});
-     
 
-pasosAgua.addEventListener('change', (evento) => {
-    const nuevo_valor = evento.target.value;
-    console.log(evento.constructor.name);
-    const mensaje = {
-        id_equipo: 0,
-        pasos_agua: Number(nuevo_valor)
-    };
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
 });
 
+// ============================================================
+// ENVÍO DE COMANDOS
+// ============================================================
 
-pasosTinta.addEventListener('change', (evento) => {
-    const nuevo_valor = evento.target.value;
+function enviarComando(cmd) {
 
     const mensaje = {
-        id_equipo: 0,
-        pasos_tinta: Number(nuevo_valor)
+        id_equipo: ID_EQUIPO,
+        cmd: String(cmd)
     };
-    console.log(mensaje);
-    tinta.forEach((elemento) => {
-        bloquear(elemento);
-    });
-    ws.send(JSON.stringify(mensaje));
-});
 
+    console.log('Enviando comando:', mensaje);
 
-disPasosTinta.addEventListener('click', (evento) => {
-    if (Number(pasosTinta.value) == 0) {
-        return;
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        console.error('WebSocket no conectado');
+        return false;
     }
-    pasosTinta.value = Number(pasosTinta.value) - 1;
-    const mensaje = {
-        id_equipo: 0,
-        pasos_tinta: Number(pasosTinta.value)
-    };
-    console.log(mensaje);
-    tinta.forEach((elemento) => {
-        bloquear(elemento);
-    });
+
     ws.send(JSON.stringify(mensaje));
-});
 
-
-aumPasosTinta.addEventListener('click', (evento) => {
-    if (Number(pasosTinta.value) == 50) {
-        return;
-    }
-    pasosTinta.value = Number(pasosTinta.value) + 1;
-    const mensaje = {
-        id_equipo: 0,
-        pasos_tinta: Number(pasosTinta.value)
-    };
-    console.log(mensaje);
-    tinta.forEach((elemento) => {
-        bloquear(elemento);
-    });
-    ws.send(JSON.stringify(mensaje));
-    
-});
-
-
-
-
-
-
-aumPasosAgua.addEventListener('click', (evento) => {
-    if (Number(pasosAgua.value) == 600) {
-        return;
-    }
-    pasosAgua.value = Number(pasosAgua.value) + 1;
-    const mensaje = {
-        id_equipo: 0,
-        pasos_agua: Number(pasosAgua.value)
-    };
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
-});
-
-disPasosAgua.addEventListener('click', (evento) => {
-    if (Number(pasosAgua.value) == 0) {
-        return;
-    }
-    pasosAgua.value = Number(pasosAgua.value) - 1;
-    const mensaje = {
-        id_equipo: 0,
-        pasos_agua: Number(pasosAgua.value)
-    };
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
-});
-
-
-
-
-rele.addEventListener('click', (evento) => {  
-    let mensaje;
-    if (rele.innerText == 'A') {
-        rele.innerText = 'E';
-        rele.classList.remove('apagado');
-        rele.classList.add('encendido')
-        mensaje = {
-            id_equipo: 0,
-            rele: 1
-        };
-    } else {
-        rele.innerText = 'A';
-        rele.classList.remove('encendido');
-        rele.classList.add('apagado');
-        mensaje = {
-            id_equipo: 0,
-            rele: 0
-        };
-    }
-    console.log(mensaje);
-    ws.send(JSON.stringify(mensaje));
-});
-
-
-
-
-
-// Botón de captura de pantalla
-
-const botonCaptura = document.getElementById('bot-captura');
-
-botonCaptura.addEventListener('click', () => {
-    const captura = document.createElement('canvas');
-    captura.width = 1920;
-    captura.height = 1080;
-
-    const ctx = captura.getContext('2d');
-
-    ctx.drawImage(video, 0, 0);
-
-    const imagenURL = captura.toDataURL('image/png');
-    const enlaceDescarga = document.createElement('a');
-
-    enlaceDescarga.href = imagenURL;
-    enlaceDescarga.download = `captura_laboratorio_${Date.now()}.png`;
-
-    enlaceDescarga.click();
-
-});
-
-let nivelZoom = 1;
-
-
-
-function aumentarZoom() {
-    nivelZoom += 0.5;
-    if (nivelZoom > 5) {
-        nivelZoom = 5; 
-    } else {
-        video.style.transform = `scale(${nivelZoom})`;
-    }    
+    return true;
 }
 
-function disminuirZoom() {
-    nivelZoom -= 0.5;
-    if (nivelZoom < 1) {
-        nivelZoom = 1;
+// ============================================================
+// BOMBA
+// ============================================================
+
+function actualizarBomba(encendida) {
+
+    bombaEncendida = encendida;
+
+    if (bombaEncendida) {
+
+        bomba.innerText = 'Encendida';
+
+        bomba.classList.remove('apagado');
+        bomba.classList.add('encendido');
+
     } else {
-        video.style.transform = `scale(${nivelZoom})`;
-    }    
+
+        bomba.innerText = 'Apagada';
+
+        bomba.classList.remove('encendido');
+        bomba.classList.add('apagado');
+    }
 }
 
-const botonAumentarZoom = document.getElementById('bot-aum-zoom');
-const botonDisminuirZoom = document.getElementById('bot-dis-zoom');
+bomba.addEventListener('click', () => {
 
-botonAumentarZoom.addEventListener('click', aumentarZoom);
-botonDisminuirZoom.addEventListener('click', disminuirZoom);
+    const nuevoEstado = !bombaEncendida;
 
-function agregarEscuchaWs() {
+    const comando = nuevoEstado ? 'B ON' : 'B OFF';
+
+    if (enviarComando(comando)) {
+        actualizarBomba(nuevoEstado);
+    }
+
+});
+
+// ============================================================
+// CAUDAL - MOTOR 2
+// ============================================================
+
+// Python recibe M2:posición y lo convierte en 2+N o 2-N.
+
+function moverMotor2(posicion) {
+
+    const nuevaPosicion = Math.max(
+        CAUDAL_MIN,
+        Math.min(CAUDAL_MAX, Number(posicion))
+    );
+
+    if (!Number.isFinite(nuevaPosicion)) return;
+
+    if (enviarComando(`M2:${nuevaPosicion}`)) {
+
+        posicionCaudal = nuevaPosicion;
+
+        sliderCaudal.value = posicionCaudal;
+    }
+}
+
+sliderCaudal.addEventListener('change', (evento) => {
+
+    moverMotor2(evento.target.value);
+
+});
+
+botonMasCaudal.addEventListener('click', () => {
+
+    if (posicionCaudal >= CAUDAL_MAX) return;
+
+    moverMotor2(posicionCaudal + 10);
+
+});
+
+botonMenosCaudal.addEventListener('click', () => {
+
+    if (posicionCaudal <= CAUDAL_MIN) return;
+
+    moverMotor2(posicionCaudal - 10);
+
+});
+
+// ============================================================
+// AGUJA - SERVO
+// ============================================================
+
+// El Arduino debe haber recibido INIT antes de aceptar Sángulo.
+
+function moverServo(angulo) {
+
+    const nuevoAngulo = Math.max(
+        ANGULO_MIN,
+        Math.min(ANGULO_MAX, Number(angulo))
+    );
+
+    if (!Number.isFinite(nuevoAngulo)) return;
+
+    const anguloFormateado = nuevoAngulo.toFixed(1);
+
+    if (enviarComando(`S${anguloFormateado}`)) {
+
+        anguloAguja = nuevoAngulo;
+
+        sliderAguja.value = anguloAguja;
+    }
+}
+
+sliderAguja.addEventListener('change', (evento) => {
+
+    moverServo(evento.target.value);
+
+});
+
+botonMasAguja.addEventListener('click', () => {
+
+    if (anguloAguja >= ANGULO_MAX) return;
+
+    moverServo(
+        Math.min(
+            ANGULO_MAX,
+            Math.round((anguloAguja + 0.1) * 10) / 10
+        )
+    );
+
+});
+
+botonMenosAguja.addEventListener('click', () => {
+
+    if (anguloAguja <= ANGULO_MIN) return;
+
+    moverServo(
+        Math.max(
+            ANGULO_MIN,
+            Math.round((anguloAguja - 0.1) * 10) / 10
+        )
+    );
+
+});
+
+// ============================================================
+// RECEPCIÓN DE MENSAJES
+// ============================================================
+function agregarEscuchaWs(intentos = 0) {
+
+    if (!ws) {
+        if (intentos < 50) {
+            window.setTimeout(
+                () => agregarEscuchaWs(intentos + 1),
+                100
+            );
+        } else {
+            console.error('[WebSocket] No se pudo obtener el WebSocket.');
+        }
+
+        return;
+    }
+
     ws.addEventListener('message', (evento) => {
-        console.log(evento.data.trim());
-        const textoProcesado = JSON.parse(evento.data.trim());
-        
-        console.log(textoProcesado);
 
-        if (textoProcesado.nivel != undefined) {
-            caudal.innerText = textoProcesado.nivel;
-        }
+        let mensaje;
 
-        if (textoProcesado.temp != undefined) {
-            temp.innerText = textoProcesado.temp;
-        }     
-        console.log(textoProcesado.rele);
-        if (textoProcesado.rele == 1) {
-            rele.innerText = 'E';
-            rele.classList.remove('apagado');
-            rele.classList.add('encendido');
-        }    
-        else if (textoProcesado.rele == 0) {
-            rele.innerText = 'A'; 
-            rele.classList.remove('encendido');
-            rele.classList.add('apagado');   
-    
+        try {
+            mensaje = JSON.parse(evento.data);
+        } catch {
+            console.log(
+                '[WebSocket] Mensaje de texto:',
+                evento.data
+            );
+            return;
         }
 
-        if (textoProcesado.pasos_agua != undefined) {
-            pasosAgua.value = textoProcesado.pasos_agua; 
+        console.log('[WebSocket] Datos recibidos:', mensaje);
+
+        if (
+            mensaje.id_equipo !== undefined &&
+            Number(mensaje.id_equipo) !== ID_EQUIPO
+        ) {
+            return;
         }
-        if (textoProcesado.pasos_tinta != undefined) {
-            pasosTinta.value = textoProcesado.pasos_tinta; 
+
+        // Presiones: formato que devuelve Python.
+        if (mensaje.tipo === 'presion') {
+
+            if (presionP4) {
+                presionP4.textContent =
+                    mensaje.presion_p4 == null
+                        ? 'Sin datos'
+                        : `${Number(mensaje.presion_p4).toFixed(2)} bar`;
+            }
+
+            if (presionP20) {
+                presionP20.textContent =
+                    mensaje.presion_p20 == null
+                        ? 'Sin datos'
+                        : `${Number(mensaje.presion_p20).toFixed(2)} bar`;
+            }
+
+            if (rpm && mensaje.rpm !== undefined) {
+                rpm.textContent =
+                    mensaje.rpm == null
+                        ? 'Sin datos'
+                        : Number(mensaje.rpm).toFixed(0);
+            }
+
+            return;
         }
+
+        // Mensajes generales de los Arduinos.
+        if (mensaje.tipo === 'mensaje') {
+            console.log(
+                `[${mensaje.origen ?? 'Arduino'}] ${mensaje.mensaje}`
+            );
+            return;
+        }
+
+        // Compatibilidad con mensajes de estado anteriores.
+        if (mensaje.estado?.bomba !== undefined) {
+            actualizarBomba(mensaje.estado.bomba.encendida);
+        }
+
+        console.debug('[WebSocket] Mensaje sin tipo reconocido:', mensaje);
     });
-}
 
+    console.info('[WebSocket] Escuchando mensajes.');
+}

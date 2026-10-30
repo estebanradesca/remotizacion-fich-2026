@@ -1,4 +1,3 @@
-
 import '../style.css';
 import './golpe.css';
 
@@ -11,6 +10,10 @@ import {
 const ID_EQUIPO = 2;
 const CAMARA_URL = import.meta.env.VITE_CAMARA_URL_1;
 
+// El firmware del motor 3 usa 1500 us como velocidad predeterminada.
+const COMANDO_CERRAR_LENTO = '3C';
+const COMANDO_ABRIR_LENTO = '3A';
+
 const videoCaudal = document.getElementById('video-caudal');
 const sliderCaudal = document.getElementById('slider-caudal');
 const botonMenosCaudal = document.getElementById('bot-menos-caudal');
@@ -18,20 +21,27 @@ const botonMasCaudal = document.getElementById('bot-mas-caudal');
 
 const botonBomba = document.getElementById('bot-bomba');
 const botonCierreRapido = document.getElementById('bot-cerrar-rapido');
-const inputVelocidadCierre = document.getElementById('input-velocidad-cierre');
 const botonCierreLento = document.getElementById('bot-cerrar-lento');
 
-const valorPresion = document.getElementById('valor-presion');
+const valorPresionP4 = document.getElementById('valor-presion-p4');
+const valorPresionP20 = document.getElementById('valor-presion-p20');
+
 const canvasPresion = document.getElementById('canvas-presion');
-const terminalMensajes = document.getElementById('terminal-mensajes');
+const botonIniciarMedicion = document.getElementById('bot-iniciar-medicion');
+const botonTerminarMedicion = document.getElementById('bot-terminar-medicion');
+const estadoMedicion = document.getElementById('estado-medicion');
 
 let bombaEncendida = false;
-let cierreRapidoActivado = false;
+let cierreRapidoCerrado = false;
+let cierreLentoCerrado = false;
 
-const historialPresion = [];
-const MAX_PUNTOS = 100;
+let medicionActiva = false;
+let inicioMedicion = null;
+let datosMedicion = [];
+
 
 window.addEventListener('DOMContentLoaded', () => {
+
     if (CAMARA_URL && videoCaudal) {
         conectarCamara(CAMARA_URL, videoCaudal);
     }
@@ -39,17 +49,21 @@ window.addEventListener('DOMContentLoaded', () => {
     conectarWebsocket(ID_EQUIPO);
     esperarWebsocket();
     dibujarGrafica();
+
 });
 
+
 function esperarWebsocket(intentos = 0) {
+
     if (!ws) {
+
         if (intentos < 50) {
             window.setTimeout(
                 () => esperarWebsocket(intentos + 1),
                 100
             );
         } else {
-            agregarMensajeTerminal('No se pudo obtener el WebSocket.');
+            console.error('[WebSocket] No se pudo obtener el WebSocket.');
         }
 
         return;
@@ -58,40 +72,55 @@ function esperarWebsocket(intentos = 0) {
     ws.addEventListener('message', recibirMensaje);
 
     ws.addEventListener('open', () => {
-        agregarMensajeTerminal('WebSocket conectado.');
+        console.info('[WebSocket] Conectado.');
     });
 
     ws.addEventListener('close', () => {
-        agregarMensajeTerminal('WebSocket desconectado.');
+        console.warn('[WebSocket] Desconectado.');
     });
+
+    ws.addEventListener('error', (error) => {
+        console.error('[WebSocket] Error:', error);
+    });
+
 }
 
+
 function enviarComando(cmd) {
+
     if (!ws || ws.readyState !== WebSocket.OPEN) {
-        agregarMensajeTerminal('No hay conexión WebSocket.');
+        console.error('[WebSocket] No hay conexión. No se envió:', cmd);
         return false;
     }
 
-    ws.send(JSON.stringify({
+    const mensaje = {
         id_equipo: ID_EQUIPO,
         cmd: String(cmd)
-    }));
+    };
 
-    console.log('[WebSocket] Comando enviado:', cmd);
-    agregarMensajeTerminal(`Comando enviado: ${cmd}`);
+    ws.send(JSON.stringify(mensaje));
+
+    console.log('[WebSocket] Comando enviado:', mensaje);
 
     return true;
 }
 
+
 function recibirMensaje(evento) {
+
     let datos;
 
     try {
         datos = JSON.parse(evento.data);
     } catch {
-        agregarMensajeTerminal(evento.data);
+        console.log(
+            '[WebSocket] Mensaje recibido (no JSON):',
+            evento.data
+        );
         return;
     }
+
+    console.log('[WebSocket] Mensaje recibido:', datos);
 
     if (
         datos.id_equipo !== undefined &&
@@ -106,31 +135,19 @@ function recibirMensaje(evento) {
     }
 
     if (datos.tipo === 'mensaje') {
-        agregarMensajeTerminal(
+        console.info(
             `[${datos.origen ?? 'Arduino'}] ${datos.mensaje}`
         );
         return;
     }
 
-    agregarMensajeTerminal(JSON.stringify(datos));
+    console.debug(
+        '[WebSocket] Mensaje sin tipo reconocido:',
+        datos
+    );
+
 }
 
-function agregarMensajeTerminal(mensaje) {
-    if (!terminalMensajes) return;
-
-    const linea = document.createElement('div');
-
-    linea.textContent =
-        `${new Date().toLocaleTimeString()} - ${mensaje}`;
-
-    terminalMensajes.appendChild(linea);
-
-    while (terminalMensajes.children.length > 100) {
-        terminalMensajes.firstElementChild.remove();
-    }
-
-    terminalMensajes.scrollTop = terminalMensajes.scrollHeight;
-}
 
 function cambiarEstadoBoton(
     boton,
@@ -138,6 +155,7 @@ function cambiarEstadoBoton(
     textoActivado,
     textoDesactivado
 ) {
+
     if (!boton) return;
 
     boton.classList.toggle('abierto', activado);
@@ -146,12 +164,21 @@ function cambiarEstadoBoton(
     boton.textContent = activado
         ? textoActivado
         : textoDesactivado;
+
 }
 
-// BOMBA
+
+// ============================================================
+// BOMBA: ARDUINO DE VÁLVULAS
+// ============================================================
+
 botonBomba?.addEventListener('click', () => {
+
     const nuevoEstado = !bombaEncendida;
-    const comando = nuevoEstado ? 'B ON' : 'B OFF';
+
+    const comando = nuevoEstado
+        ? 'B ON'
+        : 'B OFF';
 
     if (!enviarComando(comando)) return;
 
@@ -163,28 +190,43 @@ botonBomba?.addEventListener('click', () => {
         'Encendida',
         'Apagada'
     );
+
 });
 
-// ELECTROVÁLVULA
+
+// ============================================================
+// CIERRE RÁPIDO: ELECTROVÁLVULA
+// ============================================================
+
 botonCierreRapido?.addEventListener('click', () => {
-    const nuevoEstado = !cierreRapidoActivado;
-    const comando = nuevoEstado ? 'V ON' : 'V OFF';
+
+    const nuevoEstadoCerrado = !cierreRapidoCerrado;
+
+    const comando = nuevoEstadoCerrado
+        ? 'V ON'
+        : 'V OFF';
 
     if (!enviarComando(comando)) return;
 
-    cierreRapidoActivado = nuevoEstado;
+    cierreRapidoCerrado = nuevoEstadoCerrado;
 
     cambiarEstadoBoton(
         botonCierreRapido,
-        cierreRapidoActivado,
-        'Activado',
+        cierreRapidoCerrado,
+        'Abrir',
         'Cerrar'
     );
+
 });
 
-// CAUDAL: lo regula el motor 1.
-// Se envía un número entre 0 y 1300 al backend.
+
+// ============================================================
+// CAUDAL: MOTOR 1
+// Posición absoluta entre 0 y 1300
+// ============================================================
+
 function enviarCaudalDelSlider() {
+
     if (!sliderCaudal) return;
 
     const caudal = Number(sliderCaudal.value);
@@ -194,16 +236,20 @@ function enviarCaudalDelSlider() {
         caudal < 0 ||
         caudal > 1300
     ) {
-        agregarMensajeTerminal(
-            'El caudal debe ser un entero entre 0 y 1300.'
+        console.error(
+            '[Caudal] El valor debe ser un entero entre 0 y 1300.'
         );
         return;
     }
 
-    enviarComando(String(caudal));
+    // Python convierte M1:valor en 1+N o 1-N.
+    enviarComando(`M1:${caudal}`);
+
 }
 
+
 botonMenosCaudal?.addEventListener('click', () => {
+
     if (!sliderCaudal) return;
 
     sliderCaudal.value = Math.max(
@@ -212,9 +258,12 @@ botonMenosCaudal?.addEventListener('click', () => {
     );
 
     enviarCaudalDelSlider();
+
 });
 
+
 botonMasCaudal?.addEventListener('click', () => {
+
     if (!sliderCaudal) return;
 
     sliderCaudal.value = Math.min(
@@ -223,71 +272,49 @@ botonMasCaudal?.addEventListener('click', () => {
     );
 
     enviarCaudalDelSlider();
+
 });
 
-sliderCaudal?.addEventListener('change', enviarCaudalDelSlider);
 
-// CIERRE LENTO: motor paso a paso 3.
-// Envía el comando "3C <velocidad>" al Arduino de motores.
+sliderCaudal?.addEventListener(
+    'change',
+    enviarCaudalDelSlider
+);
+
+
+// ============================================================
+// CIERRE LENTO: MOTOR 3
+// 3C cierra y 3A abre.
+// ============================================================
+
 botonCierreLento?.addEventListener('click', () => {
-    if (!inputVelocidadCierre) {
-        agregarMensajeTerminal(
-            'No se encontró el input de velocidad de cierre.'
-        );
-        return;
-    }
 
-    const textoVelocidad = inputVelocidadCierre.value.trim();
-    const velocidad = Number(textoVelocidad);
+    const nuevoEstadoCerrado = !cierreLentoCerrado;
 
-    if (
-        textoVelocidad === '' ||
-        !Number.isInteger(velocidad) ||
-        velocidad <= 0
-    ) {
-        agregarMensajeTerminal(
-            'Ingresá una velocidad entera mayor que cero.'
-        );
-        return;
-    }
+    const comando = nuevoEstadoCerrado
+        ? COMANDO_CERRAR_LENTO
+        : COMANDO_ABRIR_LENTO;
 
-    const comando = `3C ${velocidad}`;
+    if (!enviarComando(comando)) return;
 
-    if (enviarComando(comando)) {
-        agregarMensajeTerminal(
-            `Solicitado cierre lento del motor 3 a velocidad ${velocidad}.`
-        );
-    }
+    cierreLentoCerrado = nuevoEstadoCerrado;
+
+    cambiarEstadoBoton(
+        botonCierreLento,
+        cierreLentoCerrado,
+        'Abrir',
+        'Cerrar'
+    );
+
 });
 
-// PRESIÓN
-function actualizarPresion(datos) {
 
-    const p20 = convertirPresion(datos.presion_p20);
-
-    if (valorPresion) {
-
-        const textoP20 = p20 === null
-            ? 'Sin datos'
-            : `${p20.toFixed(2)} bar`;
-
-        valorPresion.textContent =
-            `${textoP20}`;
-    }
-
-    historialPresion.push({
-        tiempo: Number(datos.tiempo_ms) || Date.now(),
-        p20
-    });
-
-    if (historialPresion.length > MAX_PUNTOS) {
-        historialPresion.shift();
-    }
-
-    dibujarGrafica();
-}
+// ============================================================
+// RECEPCIÓN DE PRESIÓN
+// ============================================================
 
 function convertirPresion(valor) {
+
     if (
         valor === null ||
         valor === undefined ||
@@ -298,32 +325,265 @@ function convertirPresion(valor) {
 
     const numero = Number(valor);
 
-    return Number.isFinite(numero) ? numero : null;
+    return Number.isFinite(numero)
+        ? numero
+        : null;
+
 }
 
-// GRÁFICA EN TIEMPO REAL
+
+function actualizarPresion(datos) {
+
+    const p4 = convertirPresion(datos.presion_p4);
+    const p20 = convertirPresion(datos.presion_p20);
+
+    if (valorPresionP4) {
+
+        valorPresionP4.textContent =
+            p4 === null
+                ? 'Sin datos'
+                : `${p4.toFixed(2)} bar`;
+
+    }
+
+    if (valorPresionP20) {
+
+        valorPresionP20.textContent =
+            p20 === null
+                ? 'Sin datos'
+                : `${p20.toFixed(2)} bar`;
+
+    }
+
+    // Solo se almacenan muestras durante la medición.
+
+    if (medicionActiva && inicioMedicion !== null) {
+
+        const ahora = performance.now();
+
+        datosMedicion.push({
+
+            fecha: new Date().toISOString(),
+
+            tiempo_s: (ahora - inicioMedicion) / 1000,
+
+            presion_p4: p4,
+
+            presion_p20: p20
+
+        });
+
+        dibujarGrafica();
+
+    }
+
+}
+
+
+// ============================================================
+// INICIO Y FIN DE MEDICIÓN
+// ============================================================
+
+botonIniciarMedicion?.addEventListener(
+    'click',
+    iniciarMedicion
+);
+
+botonTerminarMedicion?.addEventListener(
+    'click',
+    terminarMedicion
+);
+
+
+function iniciarMedicion() {
+
+    if (medicionActiva) return;
+
+    datosMedicion = [];
+
+    inicioMedicion = performance.now();
+
+    medicionActiva = true;
+
+    if (botonIniciarMedicion) {
+        botonIniciarMedicion.disabled = true;
+    }
+
+    if (botonTerminarMedicion) {
+        botonTerminarMedicion.disabled = false;
+    }
+
+    if (estadoMedicion) {
+        estadoMedicion.textContent = 'Medición en curso';
+    }
+
+    console.info(
+        '[Medición] Comenzó la adquisición de datos.'
+    );
+
+    dibujarGrafica();
+
+}
+
+
+function terminarMedicion() {
+
+    if (!medicionActiva) return;
+
+    medicionActiva = false;
+
+    if (botonIniciarMedicion) {
+        botonIniciarMedicion.disabled = false;
+    }
+
+    if (botonTerminarMedicion) {
+        botonTerminarMedicion.disabled = true;
+    }
+
+    if (estadoMedicion) {
+
+        estadoMedicion.textContent =
+            `Medición finalizada: ${datosMedicion.length} muestras`;
+
+    }
+
+    exportarMedicionCSV();
+
+    console.info(
+        `[Medición] Finalizada. Muestras: ${datosMedicion.length}.`
+    );
+
+    dibujarGrafica();
+
+}
+
+
+// ============================================================
+// EXPORTACIÓN CSV
+// ============================================================
+
+function exportarMedicionCSV() {
+
+    const encabezado = [
+
+        'Fecha y hora',
+
+        'Tiempo desde el inicio (s)',
+
+        'Presion P4 (bar)',
+
+        'Presion P20 (bar)'
+
+    ];
+
+    const filas = datosMedicion.map(muestra => [
+
+        muestra.fecha,
+
+        muestra.tiempo_s.toFixed(3),
+
+        muestra.presion_p4 ?? '',
+
+        muestra.presion_p20 ?? ''
+
+    ]);
+
+    const contenido = [encabezado, ...filas]
+
+        .map(fila => fila.map(escaparCSV).join(';'))
+
+        .join('\r\n');
+
+    const archivo = new Blob(
+
+        ['\uFEFF', contenido],
+
+        { type: 'text/csv;charset=utf-8;' }
+
+    );
+
+    const url = URL.createObjectURL(archivo);
+
+    const enlace = document.createElement('a');
+
+    const fecha = new Date()
+        .toISOString()
+        .replace(/[:.]/g, '-');
+
+    enlace.href = url;
+
+    enlace.download = `medicion_presion_${fecha}.csv`;
+
+    document.body.appendChild(enlace);
+
+    enlace.click();
+
+    enlace.remove();
+
+    window.setTimeout(
+        () => URL.revokeObjectURL(url),
+        1000
+    );
+
+    console.info(
+        `[Medición] Archivo CSV generado con ${datosMedicion.length} muestras.`
+    );
+
+}
+
+
+function escaparCSV(valor) {
+
+    const texto = String(valor ?? '');
+
+    return `"${texto.replace(/"/g, '""')}"`;
+
+}
+
+
+// ============================================================
+// GRÁFICA: P4 EN FUNCIÓN DEL TIEMPO
+// ============================================================
+
 function dibujarGrafica() {
+
     if (!canvasPresion) return;
 
     const contexto = canvasPresion.getContext('2d');
 
     if (!contexto) return;
 
-    const ancho = canvasPresion.clientWidth || 400;
-    const alto = 220;
+    const ancho = Math.max(
+        300,
+        canvasPresion.clientWidth
+    );
+
+    const alto = Math.max(
+        280,
+        canvasPresion.clientHeight
+    );
+
     const escala = window.devicePixelRatio || 1;
 
-    canvasPresion.width = ancho * escala;
-    canvasPresion.height = alto * escala;
-    canvasPresion.style.height = `${alto}px`;
+    canvasPresion.width = Math.round(ancho * escala);
 
-    contexto.setTransform(escala, 0, 0, escala, 0, 0);
+    canvasPresion.height = Math.round(alto * escala);
+
+    contexto.setTransform(
+        escala,
+        0,
+        0,
+        escala,
+        0,
+        0
+    );
+
     contexto.clearRect(0, 0, ancho, alto);
 
-    const margenIzquierdo = 45;
-    const margenDerecho = 12;
-    const margenSuperior = 20;
-    const margenInferior = 28;
+    const margenIzquierdo = 58;
+    const margenDerecho = 20;
+    const margenSuperior = 28;
+    const margenInferior = 48;
 
     const graficaAncho =
         ancho - margenIzquierdo - margenDerecho;
@@ -331,97 +591,336 @@ function dibujarGrafica() {
     const graficaAlto =
         alto - margenSuperior - margenInferior;
 
-    const valores = historialPresion
-        .flatMap(p => [p.p20])
-        .filter(v => v !== null && Number.isFinite(v));
+    contexto.font = '12px Lato, sans-serif';
 
-    contexto.font = '11px sans-serif';
-    contexto.strokeStyle = '#888';
-    contexto.fillStyle = '#888';
+    contexto.fillStyle = '#444';
+
+    contexto.strokeStyle = '#999';
+
     contexto.lineWidth = 1;
 
+    const muestras = datosMedicion;
+
+    // Tomamos únicamente los valores de P4.
+
+    const valores = muestras
+
+        .map(m => m.presion_p4)
+
+        .filter(
+            v => v !== null && Number.isFinite(v)
+        );
+
+    if (muestras.length === 0 || valores.length === 0) {
+
+        contexto.fillText(
+
+            medicionActiva
+                ? 'Esperando muestras de presión...'
+                : 'Presioná "Empezar a medir" para iniciar el registro.',
+
+            margenIzquierdo + 10,
+
+            margenSuperior + 25
+
+        );
+
+        dibujarEjesVacios(
+            contexto,
+            ancho,
+            alto,
+            margenIzquierdo,
+            margenSuperior,
+            margenInferior,
+            margenDerecho
+        );
+
+        return;
+
+    }
+
+    const tiempoMaximo = Math.max(
+        10,
+        muestras[muestras.length - 1].tiempo_s
+    );
+
+    const minimo = Math.min(0, ...valores);
+
+    const maximo = Math.max(1, ...valores);
+
+    const rango = maximo - minimo || 1;
+
+    // Ejes y cuadrícula.
+
+    for (let i = 0; i <= 5; i++) {
+
+        const proporcion = i / 5;
+
+        const y =
+            margenSuperior +
+            graficaAlto * (1 - proporcion);
+
+        const valor =
+            minimo + rango * proporcion;
+
+        contexto.beginPath();
+
+        contexto.strokeStyle = '#e0e3e7';
+
+        contexto.moveTo(margenIzquierdo, y);
+
+        contexto.lineTo(
+            ancho - margenDerecho,
+            y
+        );
+
+        contexto.stroke();
+
+        contexto.fillStyle = '#555';
+
+        contexto.textAlign = 'right';
+
+        contexto.fillText(
+            valor.toFixed(1),
+            margenIzquierdo - 8,
+            y + 4
+        );
+
+    }
+
+    for (let i = 0; i <= 5; i++) {
+
+        const tiempo = tiempoMaximo * i / 5;
+
+        const x =
+            margenIzquierdo +
+            graficaAncho * i / 5;
+
+        contexto.beginPath();
+
+        contexto.strokeStyle = '#f0f0f0';
+
+        contexto.moveTo(
+            x,
+            margenSuperior
+        );
+
+        contexto.lineTo(
+            x,
+            alto - margenInferior
+        );
+
+        contexto.stroke();
+
+        contexto.fillStyle = '#555';
+
+        contexto.textAlign = 'center';
+
+        contexto.fillText(
+            tiempo.toFixed(1),
+            x,
+            alto - margenInferior + 20
+        );
+
+    }
+
+    contexto.textAlign = 'left';
+
+    contexto.fillStyle = '#333';
+
+    contexto.fillText(
+        'Presión (bar)',
+        8,
+        16
+    );
+
+    // Dibujar P4.
+
+    dibujarSerie(
+
+        contexto,
+
+        muestras,
+
+        'presion_p4',
+
+        '#2878c8',
+
+        tiempoMaximo,
+
+        minimo,
+
+        rango,
+
+        margenIzquierdo,
+
+        margenSuperior,
+
+        graficaAncho,
+
+        graficaAlto,
+
+        alto,
+
+        margenInferior
+
+    );
+
+    contexto.font = '12px Lato, sans-serif';
+
+    contexto.fillStyle = '#444';
+
+    contexto.textAlign = 'center';
+
+    contexto.fillText(
+
+        'Tiempo (s)',
+
+        margenIzquierdo + graficaAncho / 2,
+
+        alto - 5
+
+    );
+
+}
+
+
+function dibujarSerie(
+
+    contexto,
+
+    muestras,
+
+    clave,
+
+    color,
+
+    tiempoMaximo,
+
+    minimo,
+
+    rango,
+
+    margenIzquierdo,
+
+    margenSuperior,
+
+    graficaAncho,
+
+    graficaAlto,
+
+    alto,
+
+    margenInferior
+
+) {
+
     contexto.beginPath();
-    contexto.moveTo(margenIzquierdo, margenSuperior);
+
+    contexto.strokeStyle = color;
+
+    contexto.lineWidth = 2;
+
+    let primerPunto = true;
+
+    for (const muestra of muestras) {
+
+        const valor = muestra[clave];
+
+        if (
+            valor === null ||
+            !Number.isFinite(valor)
+        ) {
+
+            primerPunto = true;
+
+            continue;
+
+        }
+
+        const x =
+            margenIzquierdo +
+            (muestra.tiempo_s / tiempoMaximo) * graficaAncho;
+
+        const y =
+            margenSuperior +
+            graficaAlto -
+            ((valor - minimo) / rango) * graficaAlto;
+
+        if (primerPunto) {
+
+            contexto.moveTo(x, y);
+
+            primerPunto = false;
+
+        } else {
+
+            contexto.lineTo(x, y);
+
+        }
+
+    }
+
+    contexto.stroke();
+
+}
+
+
+function dibujarEjesVacios(
+
+    contexto,
+
+    ancho,
+
+    alto,
+
+    margenIzquierdo,
+
+    margenSuperior,
+
+    margenInferior,
+
+    margenDerecho
+
+) {
+
+    contexto.beginPath();
+
+    contexto.strokeStyle = '#999';
+
+    contexto.moveTo(
+        margenIzquierdo,
+        margenSuperior
+    );
+
     contexto.lineTo(
         margenIzquierdo,
         alto - margenInferior
     );
+
     contexto.lineTo(
         ancho - margenDerecho,
         alto - margenInferior
     );
+
     contexto.stroke();
 
-    contexto.fillText('Presión (bar)', 5, 12);
+    contexto.fillStyle = '#555';
 
-    if (historialPresion.length < 2 || valores.length === 0) {
-        contexto.fillText(
-            'Esperando datos de presión...',
-            margenIzquierdo + 10,
-            margenSuperior + 20
-        );
-        return;
-    }
+    contexto.textAlign = 'center';
 
-    const maximo = Math.max(1, ...valores);
-    const minimo = Math.min(0, ...valores);
-    const rango = maximo - minimo || 1;
+    contexto.fillText(
 
-    // Marcas y etiquetas del eje Y.
-    for (let i = 0; i <= 4; i++) {
-        const valor = minimo + (rango * i / 4);
+        'Tiempo (s)',
 
-        const y = alto - margenInferior -
-            (graficaAlto * i / 4);
+        margenIzquierdo +
+        (ancho - margenIzquierdo - margenDerecho) / 2,
 
-        contexto.fillStyle = '#888';
-        contexto.fillText(valor.toFixed(1), 5, y + 4);
+        alto - 5
 
-        contexto.strokeStyle = '#ddd';
-        contexto.beginPath();
-        contexto.moveTo(margenIzquierdo, y);
-        contexto.lineTo(ancho - margenDerecho, y);
-        contexto.stroke();
-    }
+    );
 
-    function dibujarSerie(clave, color) {
-        contexto.beginPath();
-        contexto.strokeStyle = color;
-        contexto.lineWidth = 2;
-
-        let primerPunto = true;
-
-        historialPresion.forEach((punto, indice) => {
-            const valor = punto[clave];
-
-            if (valor === null || !Number.isFinite(valor)) {
-                primerPunto = true;
-                return;
-            }
-
-            const x = margenIzquierdo +
-                (indice / (historialPresion.length - 1)) *
-                graficaAncho;
-
-            const y = alto - margenInferior -
-                ((valor - minimo) / rango) * graficaAlto;
-
-            if (primerPunto) {
-                contexto.moveTo(x, y);
-                primerPunto = false;
-            } else {
-                contexto.lineTo(x, y);
-            }
-        });
-
-        contexto.stroke();
-    }
-
-    dibujarSerie('p20', '#d04b38');
-
-
-    contexto.fillStyle = '#d04b38';
-    contexto.fillText('P20', margenIzquierdo + 35, 12);
 }
+
 
 window.addEventListener('resize', dibujarGrafica);

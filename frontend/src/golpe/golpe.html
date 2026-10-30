@@ -1,154 +1,119 @@
-
 <!doctype html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golpe de Ariete</title>
 
-        <title>Golpe de Ariete</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+</head>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-    </head>
+<body>
+    <header>
+        <h1 class="titulo">Golpe de Ariete</h1>
+    </header>
 
-    <body>
-        <!-- Encabezado -->
-        <header>
-            <h1 class="titulo">Golpe de Ariete</h1>
-        </header>
+    <main>
+        <div id="cont-general">
 
-        <main>
-            <div id="cont-general">
+            <section id="cont-observaciones">
+                <h4>Esquema</h4>
 
-                <div id="cont-observaciones">
-                    <h4>Esquema</h4>
-
-                    <div id="cont-panel">
-                        <!-- Panel de tuberías -->
-                        <svg
-                            version="1.1"
-                            id="esquema-tuberias"
-                            width="500"
-                            height="350"
-                            viewBox="0 0 200 250"
-                            inkscape:version="1.4.2 (ebf0e94, 2025-05-08)"
-                            sodipodi:docname="panel.svg"
-                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:svg="http://www.w3.org/2000/svg">
-                        </svg>
-                    </div>
-
-                    <div id="cont-camaras-crono">
-
-                        <!-- Cámara de caudal -->
-                        <div id="cont-camara-caudal">
-                            <h4>Caudal</h4>
-
-                            <div class="cont-video">
-                                <video
-                                    id="video-caudal"
-                                    autoplay
-                                    playsinline
-                                    muted>
-                                </video>
-                            </div>
-                        </div>
-
-                        <!-- Gráfica de presión -->
-                        <div id="cont-grafica-presion">
-                            <h4 id="tit-grafica-presion">Gráfica en tiempo real</h4>
-
-                            <div id="cont-canvas-presion">
-                                <canvas id="canvas-presion"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
+                <div id="cont-panel">
+                    <svg
+                        version="1.1"
+                        id="esquema-tuberias"
+                        width="500"
+                        height="350"
+                        viewBox="0 0 200 250"
+                        xmlns="http://www.w3.org/2000/svg">
+                    </svg>
                 </div>
 
-                <!-- Controles -->
-                <div id="cont-controles">
-                    <h4>Datos de control</h4>
+                <div id="cont-camaras-crono">
+                    <section id="cont-camara-caudal">
+                        <h4>Caudal</h4>
+                        <div class="cont-video">
+                            <video
+                                id="video-caudal"
+                                autoplay
+                                playsinline
+                                muted>
+                            </video>
+                        </div>
+                    </section>
 
-                    <div id="cont-manejo-controles">
+                    <section id="cont-grafica-presion">
+                        <h4 id="tit-grafica-presion">Presión en tiempo real</h4>
 
-                        <!-- Regulador de caudal -->
-                        <div id="cont-reg-caudal">
-                            <span>Caudal</span>
-
-                            <div id="cont-regulador-caudal">
-                                <button id="bot-menos-caudal" type="button">-</button>
-
-                                <input
-                                    type="range"
-                                    id="slider-caudal"
-                                    min="0"
-                                    max="1300"
-                                    step="1"
-                                    value="0">
-
-                                <button id="bot-mas-caudal" type="button">+</button>
-                            </div>
+                        <div id="cont-controles-medicion">
+                            
+                            <span id="estado-medicion">Medición no iniciada</span>
                         </div>
 
-                        <!-- Bomba -->
-                        <div class="datos" id="cont-control-bomba">
-                            <span>Bomba</span>
-                            <button id="bot-bomba" class="apagado" type="button">
-                                Apagada
+                        <div id="cont-canvas-presion">
+                            <canvas id="canvas-presion" aria-label="Gráfica de presión en función del tiempo"></canvas>
+                        </div>
+                        <button id="bot-iniciar-medicion" type="button">
+                                Empezar a medir
                             </button>
-                        </div>
-
-                        <!-- Cierre rápido -->
-                        <div class="datos" id="cont-cierre-rapido">
-                            <span>Cierre Rápido</span>
-                            <button id="bot-cerrar-rapido" class="apagado" type="button">
-                                Cerrar
+                            <button id="bot-terminar-medicion" type="button" disabled>
+                                Terminar medición y guardar Excel
                             </button>
-                        </div>
+                    </section>
+                </div>
+            </section>
 
-                        <!-- Cierre lento -->
-                        <div class="datos" id="cont-cierre-lento">
-                            <span>Cierre Lento</span>
+            <section id="cont-controles">
+                <h4>Datos de control</h4>
 
+                <div id="cont-manejo-controles">
+
+                    <div id="cont-reg-caudal">
+                        <span>Caudal</span>
+                        <div id="cont-regulador-caudal">
+                            <button id="bot-menos-caudal" type="button" aria-label="Disminuir caudal">-</button>
                             <input
-                                type="number"
-                                id="input-velocidad-cierre"
-                                placeholder="Velocidad">
-
-                            <button id="bot-cerrar-lento" class="apagado" type="button">
-                                Cerrar
-                            </button>
+                                type="range"
+                                id="slider-caudal"
+                                min="0"
+                                max="1300"
+                                step="1"
+                                value="0">
+                            <button id="bot-mas-caudal" type="button" aria-label="Aumentar caudal">+</button>
                         </div>
-
-                        <!-- Presión -->
-                        <div class="datos" id="cont-valor-presion">
-                            <span>Presión</span>
-                            <strong>
-                                <span id="valor-presion">Sin datos</span>
-                            </strong>
-                        </div>
-
                     </div>
 
-                    <!-- Terminal -->
-                    <div id="cont-terminal">
-                        <div id="terminal-mensajes"></div>
+                    <div class="datos" id="cont-control-bomba">
+                        <span>Bomba</span>
+                        <button id="bot-bomba" class="apagado" type="button">Apagada</button>
                     </div>
 
+                    <div class="datos" id="cont-cierre-rapido">
+                        <span>Cierre rápido</span>
+                        <button id="bot-cerrar-rapido" class="apagado" type="button">Cerrar</button>
+                    </div>
+
+                    <div class="datos" id="cont-cierre-lento">
+                        <span>Cierre lento</span>
+                        <button id="bot-cerrar-lento" class="apagado" type="button">Cerrar</button>
+                    </div>
+
+                    <div class="datos" id="cont-valor-presion">
+                        <span>Presión</span>
+                        <strong><span id="valor-presion-p4">Sin datos</span></strong>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </section>
+        </div>
+    </main>
 
-        <!-- Pie de página -->
-        <footer>
-            <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
-        </footer>
+    <footer>
+        <p>© 2026 FICH | UNIVERSIDAD NACIONAL DEL LITORAL</p>
+    </footer>
 
-        <!-- JavaScript -->
-        <script type="module" src="./golpe.js"></script>
-    </body>
+    <script type="module" src="./golpe.js"></script>
+</body>
 </html>

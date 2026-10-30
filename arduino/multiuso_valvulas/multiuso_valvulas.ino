@@ -326,7 +326,7 @@ if (monitoreoActivo &&
   linea += "|VALVULA:";
   linea += valvulaActiva ? "ON" : "OFF";
 
-  //ethernetSerial.println(linea);
+  ethernetSerial.println(linea);
   Serial.println(linea);
 }
 
